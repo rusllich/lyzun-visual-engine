@@ -2,6 +2,7 @@ import Hero from "@/components/sections/Hero"
 import Experience from "@/components/sections/Experience"
 import SmoothScroll from "@/components/providers/SmoothScroll"
 import CustomCursor from "@/components/effects/CustomCursor"
+import InteractiveShowcase from "@/components/sections/InteractiveShowcase"
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
         <CustomCursor />
         <Hero />
         <Experience />
+        <InteractiveShowcase />
       </main>
     </SmoothScroll>
   )
