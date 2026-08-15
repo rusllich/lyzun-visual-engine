@@ -17,6 +17,10 @@ export default function Hero() {
   const content = useRef<HTMLDivElement>(null)
   const scene = useRef<HTMLDivElement>(null)
 
+  const scrollToSection = (sectionId: string) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
+  }
+
   useGSAP(
     () => {
       if (!section.current || !content.current || !scene.current) return
@@ -116,11 +120,29 @@ export default function Hero() {
 
             <RevealText delay={0.4}>
               <div className="mt-10 flex flex-wrap gap-3">
-                <MagneticButton variant="primary">
+                <MagneticButton
+                  variant="primary"
+                  analyticsEvent="cta_clicked"
+                  analyticsProperties={{
+                    cta_id: "explore_engine",
+                    cta_location: "hero",
+                    destination: "interactive-showcase",
+                  }}
+                  onClick={() => scrollToSection("interactive-showcase")}
+                >
                   Explore the engine
                 </MagneticButton>
 
-                <MagneticButton variant="secondary">
+                <MagneticButton
+                  variant="secondary"
+                  analyticsEvent="cta_clicked"
+                  analyticsProperties={{
+                    cta_id: "view_capabilities",
+                    cta_location: "hero",
+                    destination: "capabilities",
+                  }}
+                  onClick={() => scrollToSection("capabilities")}
+                >
                   View capabilities
                 </MagneticButton>
               </div>

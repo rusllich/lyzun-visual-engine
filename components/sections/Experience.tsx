@@ -22,7 +22,10 @@ const items = [
 
 export default function Experience() {
   return (
-    <section className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
+    <section
+      id="capabilities"
+      className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+    >
       <div className="mx-auto max-w-[1400px]">
 
         <div className="mb-20 grid gap-10 lg:grid-cols-2">

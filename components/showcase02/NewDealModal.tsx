@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
+import { captureAnalyticsEvent } from "@/lib/analytics"
 
 type Props = {
   open: boolean
@@ -12,6 +13,10 @@ export default function NewDealModal({ open, onClose }: Props) {
   const [saved, setSaved] = useState(false)
 
   const handleSave = () => {
+    captureAnalyticsEvent("demo_deal_created", {
+      demo: "axis_crm",
+      source: "new_deal_modal",
+    })
     setSaved(true)
     window.setTimeout(() => {
       setSaved(false)

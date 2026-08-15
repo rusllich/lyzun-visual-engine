@@ -17,7 +17,10 @@ const stack = [
 
 export default function InteractiveShowcase() {
   return (
-    <section className="relative overflow-hidden bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
+    <section
+      id="interactive-showcase"
+      className="relative overflow-hidden bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+    >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(95,62,220,0.12),transparent_35%)]" />
 
       <div className="relative mx-auto max-w-[1400px]">

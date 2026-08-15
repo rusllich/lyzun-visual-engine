@@ -2,15 +2,25 @@
 
 import { useRef } from "react"
 import { motion } from "motion/react"
+import {
+  captureAnalyticsEvent,
+  type AnalyticsProperties,
+} from "@/lib/analytics"
 
 type Props = {
   children: React.ReactNode
   variant?: "primary" | "secondary"
+  analyticsEvent?: string
+  analyticsProperties?: AnalyticsProperties
+  onClick?: () => void
 }
 
 export default function MagneticButton({
   children,
   variant = "primary",
+  analyticsEvent,
+  analyticsProperties,
+  onClick,
 }: Props) {
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -30,6 +40,14 @@ export default function MagneticButton({
     ref.current.style.transform = "translate3d(0, 0, 0)"
   }
 
+  const handleClick = () => {
+    if (analyticsEvent) {
+      captureAnalyticsEvent(analyticsEvent, analyticsProperties)
+    }
+
+    onClick?.()
+  }
+
   const style =
     variant === "primary"
       ? "bg-white text-black"
@@ -39,6 +57,7 @@ export default function MagneticButton({
     <motion.button
       ref={ref}
       type="button"
+      onClick={handleClick}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
       whileTap={{ scale: 0.97 }}

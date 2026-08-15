@@ -34,3 +34,22 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## PostHog analytics
+
+The application initializes PostHog from `instrumentation-client.ts` before
+React hydration. It captures pageviews, page leave events, browser exceptions,
+CTA clicks, and the AXIS CRM demo conversion without blocking the UI when
+analytics is unavailable.
+
+Copy `.env.example` to `.env.local` and provide the project values:
+
+```bash
+NEXT_PUBLIC_POSTHOG_KEY=phc_your_project_token
+NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+```
+
+Add the same variables to the deployment environment. The browser project
+token is intentionally configured through environment variables and no private
+API key belongs in the repository. See the official
+[PostHog Next.js guide](https://posthog.com/docs/libraries/next-js).
