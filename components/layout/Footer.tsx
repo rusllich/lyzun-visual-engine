@@ -9,11 +9,11 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative border-t border-white/10 bg-[#030303] px-7 pb-10 pt-20 text-white sm:px-12 lg:px-20 xl:px-28">
+    <footer className="glass-panel-strong relative border-x-0 border-b-0 px-7 pb-10 pt-20 text-white sm:px-12 lg:px-20 xl:px-28">
       <div className="mx-auto max-w-[1400px]">
         <div className="grid gap-12 md:grid-cols-[1.3fr_.7fr_.7fr]">
           <div>
-            <p className="text-sm font-semibold tracking-[0.28em]">MORPH</p>
+            <p className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-[0.28em]">MORPH</p>
             <p className="mt-5 max-w-sm text-sm leading-6 text-white/40">
               We design and build premium websites and digital products for
               founders and businesses who need to be taken seriously online.
@@ -21,7 +21,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="mb-5 text-[11px] uppercase tracking-[0.3em] text-white/30">
+            <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.3em] text-white/30">
               Navigate
             </p>
             <ul className="space-y-3">
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="mb-5 text-[11px] uppercase tracking-[0.3em] text-white/30">
+            <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.3em] text-white/30">
               Get in touch
             </p>
             <a

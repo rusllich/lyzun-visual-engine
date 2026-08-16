@@ -75,12 +75,12 @@ export default function Process() {
   return (
     <section
       id="process"
-      className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+      className="relative px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
     >
       <div className="mx-auto max-w-[1400px]">
-        <div className="mb-16 grid gap-10 lg:grid-cols-2">
+        <div className="glass-panel relative mb-16 grid gap-10 rounded-[24px] p-8 lg:grid-cols-2 lg:p-10">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
               How we work together
             </p>
 
@@ -107,9 +107,9 @@ export default function Process() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.6, delay: index * 0.08 }}
-              className="relative rounded-[24px] border border-white/10 bg-white/[0.025] p-6"
+              className="glass-panel relative rounded-[20px] p-6"
             >
-              <span className="text-xs text-white/25">{step.number}</span>
+              <span className="font-mono text-xs text-white/25">{step.number}</span>
               <h3 className="mt-6 text-lg font-medium tracking-[-0.02em]">
                 {step.title}
               </h3>
@@ -121,11 +121,11 @@ export default function Process() {
         </div>
 
         <div className="mt-24">
-          <p className="mb-10 text-xs uppercase tracking-[0.35em] text-white/35">
+          <p className="mb-10 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
             Built to be trusted
           </p>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {trust.map((item, index) => (
               <motion.div
                 key={item.title}
@@ -133,15 +133,23 @@ export default function Process() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, delay: index * 0.06 }}
-                className="flex items-start gap-4 rounded-[24px] border border-white/10 bg-white/[0.02] p-6"
+                className={`glass-panel flex items-start gap-4 rounded-[20px] p-6 ${
+                  index === 0 ? "lg:col-span-2" : ""
+                }`}
               >
-                <item.icon className="mt-1 h-5 w-5 shrink-0 text-white/45" />
+                <item.icon
+                  className={`mt-1 h-5 w-5 shrink-0 ${
+                    index === 0 ? "text-[#7b68ff]" : "text-white/45"
+                  }`}
+                />
                 <div>
                   <h3 className="text-base font-medium tracking-[-0.01em]">
                     {item.title}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-white/40">
                     {item.text}
+                    {index === 0 &&
+                      " Every build ships with a Lighthouse pass and real-device checks before handoff."}
                   </p>
                 </div>
               </motion.div>

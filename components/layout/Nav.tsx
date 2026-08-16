@@ -27,10 +27,8 @@ export default function Nav() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 ${
-        scrolled
-          ? "border-b border-white/10 bg-[#030303]/75 backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent"
+      className={`glass-panel fixed inset-x-0 top-0 z-[100] transition-all duration-500 ${
+        scrolled ? "glass-panel-strong" : ""
       }`}
     >
       <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-7 py-5 text-white sm:px-12 lg:px-20 xl:px-28">
@@ -40,7 +38,7 @@ export default function Nav() {
             event.preventDefault()
             handleNavigate("#top")
           }}
-          className="text-sm font-semibold tracking-[0.28em]"
+          className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-[0.28em]"
         >
           MORPH
         </a>
@@ -54,7 +52,7 @@ export default function Nav() {
                 event.preventDefault()
                 handleNavigate(link.href)
               }}
-              className="text-xs uppercase tracking-[0.25em] text-white/45 transition-colors hover:text-white"
+              className="font-mono text-xs uppercase tracking-[0.25em] text-white/45 transition-colors hover:text-white"
             >
               {link.label}
             </a>
@@ -100,7 +98,7 @@ export default function Nav() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-t border-white/10 bg-[#030303]/95 backdrop-blur-xl md:hidden"
+            className="glass-panel-strong overflow-hidden md:hidden"
           >
             <div className="flex flex-col gap-1 px-7 py-6">
               {links.map((link) => (

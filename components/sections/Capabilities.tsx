@@ -29,12 +29,12 @@ export default function Capabilities() {
   return (
     <section
       id="capabilities"
-      className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+      className="relative px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
     >
       <div className="mx-auto max-w-[1400px]">
-        <div className="mb-20 grid gap-10 lg:grid-cols-2">
+        <div className="glass-panel relative mb-20 grid gap-10 rounded-[24px] p-8 lg:grid-cols-2 lg:p-10">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
               How MORPH works
             </p>
 
@@ -53,7 +53,7 @@ export default function Capabilities() {
           </div>
         </div>
 
-        <div className="border-t border-white/10">
+        <div className="glass-panel rounded-[24px] px-6">
           {items.map((item, index) => (
             <motion.div
               key={item.number}
@@ -73,9 +73,15 @@ export default function Capabilities() {
                 duration: 0.7,
                 delay: index * 0.08,
               }}
-              className="grid gap-6 border-b border-white/10 py-10 md:grid-cols-[100px_1fr_1fr]"
+              className={`grid gap-6 py-10 transition-colors duration-300 hover:bg-white/[0.02] md:grid-cols-[100px_1fr_1fr] ${
+                index !== items.length - 1 ? "border-b border-white/10" : ""
+              }`}
             >
-              <span className="text-sm text-white/25">
+              <span
+                className={`font-mono text-sm ${
+                  index === 1 ? "text-[#ffb067]/70" : "text-white/25"
+                }`}
+              >
                 {item.number}
               </span>
 

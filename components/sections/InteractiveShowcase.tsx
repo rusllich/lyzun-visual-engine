@@ -17,13 +17,13 @@ const stack = [
 
 export default function InteractiveShowcase() {
   return (
-    <section className="relative overflow-hidden bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
+    <section className="relative overflow-hidden px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(95,62,220,0.12),transparent_35%)]" />
 
       <div className="relative mx-auto max-w-[1400px]">
         <div className="mb-16 grid gap-10 lg:grid-cols-[1.15fr_.85fr]">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
               Interactive Layer
             </p>
 
@@ -52,7 +52,7 @@ export default function InteractiveShowcase() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.8 }}
-            className="relative min-h-[420px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.025] p-3"
+            className="glass-panel relative min-h-[420px] overflow-hidden rounded-[32px] p-3"
           >
             <div className="absolute inset-0 overflow-hidden">
               <Meteors number={14} />
@@ -68,7 +68,7 @@ export default function InteractiveShowcase() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ duration: 0.8, delay: 0.08 }}
-            className="relative min-h-[420px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.025] p-3"
+            className="glass-panel relative min-h-[420px] overflow-hidden rounded-[32px] p-3"
           >
             <div className="relative h-full overflow-hidden rounded-[28px] border border-white/[0.06] bg-black/35">
               <LottieDemo />
@@ -98,10 +98,10 @@ export default function InteractiveShowcase() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.65, delay: index * 0.08 }}
               whileHover={{ y: -6 }}
-              className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] p-7"
+              className="glass-panel group relative overflow-hidden rounded-[20px] p-7"
             >
               <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-violet-500/10 blur-3xl" />
+                <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#7b68ff]/12 blur-3xl" />
               </div>
 
               <span className="relative text-[10px] uppercase tracking-[0.3em] text-white/25">

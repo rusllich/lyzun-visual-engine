@@ -71,10 +71,10 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-5 py-2.5 text-sm transition-colors ${
+      className={`rounded-full px-5 py-2.5 text-sm transition-colors ${
         active
-          ? "border-white bg-white text-black"
-          : "border-white/15 bg-white/[0.025] text-white/60 hover:border-white/30 hover:text-white"
+          ? "border border-white bg-white text-black"
+          : "glass-panel text-white/60 hover:text-white"
       }`}
     >
       {label}
@@ -125,13 +125,13 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+      className="relative overflow-hidden px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(111,82,255,0.16),transparent_38%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(123,104,255,0.14),transparent_38%),radial-gradient(circle_at_80%_80%,rgba(255,176,103,0.1),transparent_40%)]" />
 
       <div className="relative mx-auto max-w-[900px]">
         <div className="mb-14 text-center">
-          <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
+          <p className="mb-5 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
             Start a project
           </p>
           <h2 className="text-5xl font-medium leading-[0.95] tracking-[-0.045em] md:text-6xl">
@@ -142,7 +142,7 @@ export default function Contact() {
           </p>
         </div>
 
-        <div className="rounded-[32px] border border-white/10 bg-white/[0.025] p-6 sm:p-10">
+        <div className="glass-panel-strong rounded-[32px] p-6 sm:p-10">
           {status === "done" ? (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -173,6 +173,7 @@ export default function Contact() {
                 ))}
               </div>
 
+              <div className="min-h-[420px]">
               <AnimatePresence mode="wait">
                 {step === 1 && (
                   <motion.div
@@ -220,7 +221,7 @@ export default function Contact() {
                         }))
                       }
                       placeholder="e.g. We sell handmade furniture online"
-                      className="mb-8 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-white/30"
+                      className="glass-panel mb-8 w-full rounded-2xl px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-[#7b68ff]/40"
                     />
 
                     <p className="mb-6 text-lg text-white/70">
@@ -319,7 +320,7 @@ export default function Contact() {
                           }))
                         }
                         placeholder="Your name"
-                        className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-white/30"
+                        className="glass-panel rounded-2xl px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-[#7b68ff]/40"
                       />
                       <input
                         value={form.email}
@@ -331,7 +332,7 @@ export default function Contact() {
                         }
                         type="email"
                         placeholder="Email address"
-                        className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-white/30"
+                        className="glass-panel rounded-2xl px-5 py-3.5 text-white outline-none placeholder:text-white/20 focus:border-[#7b68ff]/40"
                       />
                     </div>
 
@@ -343,6 +344,7 @@ export default function Contact() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              </div>
 
               <div className="mt-10 flex items-center justify-between">
                 <button

@@ -9,11 +9,13 @@ import Process from "@/components/sections/Process"
 import Contact from "@/components/sections/Contact"
 import SmoothScroll from "@/components/providers/SmoothScroll"
 import CustomCursor from "@/components/effects/CustomCursor"
+import LiveBackdrop from "@/components/three/LiveBackdrop"
 
 export default function Home() {
   return (
     <SmoothScroll>
-      <main className="min-h-screen bg-[#030303]">
+      <main className="relative min-h-screen bg-[#030303]">
+        <LiveBackdrop />
         <CustomCursor />
         <Nav />
         <Hero />

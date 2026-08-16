@@ -47,7 +47,7 @@ export default function MagneticButton({
   const style =
     variant === "primary"
       ? "bg-white text-black"
-      : "border border-white/15 bg-white/[0.025] text-white/70 backdrop-blur-xl"
+      : "glass-panel text-white/70 hover:border-[#7b68ff]/40"
 
   const sharedClassName = `inline-flex items-center justify-center rounded-full px-7 py-3.5 text-sm font-medium transition-transform duration-200 will-change-transform ${style} ${className}`
 

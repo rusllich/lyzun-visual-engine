@@ -1,13 +1,11 @@
 "use client"
 
 import { useRef } from "react"
-import { motion } from "motion/react"
 import MagneticButton from "@/components/effects/MagneticButton"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 
-import HeroScene from "@/components/three/HeroScene"
 import RevealText from "@/components/motion/RevealText"
 
 gsap.registerPlugin(ScrollTrigger)
@@ -15,13 +13,16 @@ gsap.registerPlugin(ScrollTrigger)
 export default function Hero() {
   const section = useRef<HTMLElement>(null)
   const content = useRef<HTMLDivElement>(null)
-  const scene = useRef<HTMLDivElement>(null)
 
   useGSAP(
     () => {
-      if (!section.current || !content.current || !scene.current) return
+      if (!section.current || !content.current) return
 
-      const timeline = gsap.timeline({
+      gsap.to(content.current, {
+        y: -80,
+        opacity: 0.22,
+        scale: 0.94,
+        ease: "none",
         scrollTrigger: {
           trigger: section.current,
           start: "top top",
@@ -30,28 +31,6 @@ export default function Hero() {
           pin: true,
         },
       })
-
-      timeline
-        .to(
-          content.current,
-          {
-            y: -80,
-            opacity: 0.22,
-            scale: 0.94,
-            ease: "none",
-          },
-          0
-        )
-        .to(
-          scene.current,
-          {
-            scale: 1.32,
-            xPercent: -12,
-            rotate: -3,
-            ease: "none",
-          },
-          0
-        )
     },
     { scope: section }
   )
@@ -60,16 +39,8 @@ export default function Hero() {
     <section
       id="top"
       ref={section}
-      className="relative min-h-screen overflow-hidden bg-[#030303] text-white"
+      className="relative min-h-screen overflow-hidden text-white"
     >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 65% 45%, rgba(105,72,255,0.23), transparent 31%), radial-gradient(circle at 30% 65%, rgba(54,34,130,0.15), transparent 42%)",
-        }}
-      />
-
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
@@ -79,18 +50,24 @@ export default function Hero() {
         }}
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,#030303_100%)] opacity-70" />
-
-      <div className="relative z-10 mx-auto grid min-h-screen max-w-[1600px] grid-cols-1 lg:grid-cols-[1.02fr_.98fr]">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-[1600px] items-center px-7 py-24 sm:px-12 lg:px-20 xl:px-28">
         <div
           ref={content}
-          className="flex min-h-[70vh] items-center px-7 py-24 sm:px-12 lg:min-h-screen lg:px-20 xl:px-28"
+          className="relative max-w-3xl rounded-[32px] p-2"
         >
-          <div className="max-w-4xl">
+          <div
+            className="pointer-events-none absolute inset-0 -z-10 rounded-[32px]"
+            style={{
+              background:
+                "radial-gradient(ellipse 120% 100% at 20% 30%, rgba(3,3,8,0.72), transparent 68%)",
+            }}
+          />
+
+          <div className="p-6 sm:p-8">
             <RevealText>
               <div className="mb-8 flex items-center gap-4">
                 <span className="h-px w-12 bg-white/30" />
-                <p className="text-[11px] font-medium uppercase tracking-[0.42em] text-white/45">
+                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.42em] text-white/45">
                   MORPH — Digital Experience Studio
                 </p>
               </div>
@@ -130,26 +107,6 @@ export default function Hero() {
             </RevealText>
           </div>
         </div>
-
-        <motion.div
-          ref={scene}
-          initial={{
-            opacity: 0,
-            scale: 0.9,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.5,
-            delay: 0.2,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="relative h-[55vh] min-h-[500px] lg:h-screen"
-        >
-          <HeroScene />
-        </motion.div>
       </div>
 
       <div className="absolute bottom-7 left-7 z-20 hidden items-center gap-3 text-[10px] uppercase tracking-[0.3em] text-white/30 sm:flex lg:left-20 xl:left-28">

@@ -31,11 +31,11 @@ const situations = [
 
 export default function BusinessProblems() {
   return (
-    <section className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
+    <section className="relative px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
       <div className="mx-auto max-w-[1400px]">
-        <div className="mb-16 grid gap-10 lg:grid-cols-2">
+        <div className="glass-panel relative mb-16 grid gap-10 rounded-[24px] p-8 lg:grid-cols-2 lg:p-10">
           <div>
-            <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
+            <p className="mb-5 font-mono text-xs uppercase tracking-[0.35em] text-white/35">
               Sound familiar?
             </p>
 
@@ -55,33 +55,42 @@ export default function BusinessProblems() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {situations.map((item, index) => (
-            <motion.div
-              key={item.problem}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: index * 0.06 }}
-              className="group relative flex min-h-[240px] flex-col justify-between overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.025] p-7"
-            >
-              <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-500/10 blur-3xl" />
-              </div>
+          {situations.map((item, index) => {
+            const warm = index % 2 === 1
+            const radius = index % 3 === 0 ? "rounded-[16px]" : "rounded-[28px]"
 
-              <p className="relative text-lg leading-7 text-white/70">
-                “{item.problem}”
-              </p>
+            return (
+              <motion.div
+                key={item.problem}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.6, delay: index * 0.06 }}
+                className={`glass-panel group relative flex min-h-[240px] flex-col justify-between overflow-hidden p-7 ${radius}`}
+              >
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+                  <div
+                    className={`absolute -right-16 -top-16 h-48 w-48 rounded-full blur-3xl ${
+                      warm ? "bg-[#ffb067]/12" : "bg-[#7b68ff]/14"
+                    }`}
+                  />
+                </div>
 
-              <div className="relative mt-8 border-t border-white/10 pt-5">
-                <p className="text-[10px] uppercase tracking-[0.3em] text-white/25">
-                  MORPH builds
+                <p className="relative text-lg leading-7 text-white/70">
+                  “{item.problem}”
                 </p>
-                <p className="mt-3 text-sm leading-6 text-white/45">
-                  {item.response}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+
+                <div className="relative mt-8 border-t border-white/10 pt-5">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/25">
+                    MORPH builds
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-white/45">
+                    {item.response}
+                  </p>
+                </div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>
