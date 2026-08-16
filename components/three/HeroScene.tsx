@@ -76,19 +76,28 @@ function CoreObject() {
   )
 }
 
+function createRng(seed: number) {
+  let state = seed
+  return () => {
+    state = (state * 1664525 + 1013904223) >>> 0
+    return state / 4294967296
+  }
+}
+
 function ParticleField() {
   const points = useRef<THREE.Points>(null)
 
   const positions = useMemo(() => {
     const amount = 550
     const array = new Float32Array(amount * 3)
+    const rng = createRng(1337)
 
     for (let i = 0; i < amount; i++) {
-      const radius = 3 + Math.random() * 6
-      const angle = Math.random() * Math.PI * 2
+      const radius = 3 + rng() * 6
+      const angle = rng() * Math.PI * 2
 
       array[i * 3] = Math.cos(angle) * radius
-      array[i * 3 + 1] = (Math.random() - 0.5) * 7
+      array[i * 3 + 1] = (rng() - 0.5) * 7
       array[i * 3 + 2] = Math.sin(angle) * radius
     }
 

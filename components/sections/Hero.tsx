@@ -58,6 +58,7 @@ export default function Hero() {
 
   return (
     <section
+      id="top"
       ref={section}
       className="relative min-h-screen overflow-hidden bg-[#030303] text-white"
     >
@@ -90,38 +91,40 @@ export default function Hero() {
               <div className="mb-8 flex items-center gap-4">
                 <span className="h-px w-12 bg-white/30" />
                 <p className="text-[11px] font-medium uppercase tracking-[0.42em] text-white/45">
-                  Lyzun Visual Engine
+                  MORPH — Digital Experience Studio
                 </p>
               </div>
             </RevealText>
 
             <RevealText delay={0.08}>
               <h1 className="text-[clamp(4rem,8vw,8.8rem)] font-medium leading-[0.82] tracking-[-0.065em]">
-                Digital
+                Websites that
                 <br />
-                experiences
+                make your business
                 <br />
                 <span className="text-white/43">
-                  that feel alive.
+                  impossible to ignore.
                 </span>
               </h1>
             </RevealText>
 
             <RevealText delay={0.25}>
               <p className="mt-9 max-w-xl text-base leading-7 text-white/45 md:text-lg">
-                Interactive interfaces, cinematic motion and real-time 3D
-                experiences engineered for modern digital products.
+                MORPH designs and builds premium websites and digital
+                products for founders and businesses who need to be taken
+                seriously online — strategy, design, 3D and engineering,
+                combined.
               </p>
             </RevealText>
 
             <RevealText delay={0.4}>
               <div className="mt-10 flex flex-wrap gap-3">
-                <MagneticButton variant="primary">
-                  Explore the engine
+                <MagneticButton variant="primary" href="#contact">
+                  Start a project
                 </MagneticButton>
 
-                <MagneticButton variant="secondary">
-                  View capabilities
+                <MagneticButton variant="secondary" href="#work">
+                  See the work
                 </MagneticButton>
               </div>
             </RevealText>

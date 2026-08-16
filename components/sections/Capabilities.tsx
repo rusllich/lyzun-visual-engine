@@ -5,45 +5,50 @@ import { motion } from "motion/react"
 const items = [
   {
     number: "01",
-    title: "Cinematic motion",
-    text: "Scroll-driven sequences that behave like a directed visual story rather than generic page transitions.",
+    title: "Strategy & positioning",
+    text: "We start with your business, not a template — positioning, story and conversion architecture come before a single pixel.",
   },
   {
     number: "02",
-    title: "Real-time 3D",
-    text: "Interactive WebGL objects, product scenes and visual systems rendered directly inside the browser.",
+    title: "Design & 3D craft",
+    text: "Interfaces, motion and real-time 3D built specifically for your brand: custom shaders, spatial typography and interaction, not stock assets.",
   },
   {
     number: "03",
-    title: "Living interfaces",
-    text: "Microinteractions, responsive motion and visual feedback designed around actual user behaviour.",
+    title: "Frontend engineering",
+    text: "Production-grade builds that are fast, accessible and stable — ambitious visuals that never come at the cost of control.",
+  },
+  {
+    number: "04",
+    title: "Launch & growth",
+    text: "SEO foundations, analytics and support after launch, so the site keeps performing long after it ships.",
   },
 ]
 
-export default function Experience() {
+export default function Capabilities() {
   return (
-    <section className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28">
+    <section
+      id="capabilities"
+      className="relative bg-[#030303] px-7 py-32 text-white sm:px-12 lg:px-20 xl:px-28"
+    >
       <div className="mx-auto max-w-[1400px]">
-
         <div className="mb-20 grid gap-10 lg:grid-cols-2">
           <div>
             <p className="mb-5 text-xs uppercase tracking-[0.35em] text-white/35">
-              Capabilities
+              How MORPH works
             </p>
 
             <h2 className="max-w-3xl text-5xl font-medium leading-[0.92] tracking-[-0.045em] md:text-7xl">
               Not decoration.
               <br />
-              <span className="text-white/35">
-                Digital choreography.
-              </span>
+              <span className="text-white/35">Business choreography.</span>
             </h2>
           </div>
 
           <div className="flex items-end">
             <p className="max-w-xl text-lg leading-8 text-white/42">
-              Every visual system is built around hierarchy, interaction,
-              movement and performance — not around stacking random effects.
+              Business strategy, creative direction and advanced engineering
+              are treated as one discipline — not three separate hand-offs.
             </p>
           </div>
         </div>
