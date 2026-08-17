@@ -1,37 +1,39 @@
-const links = [
-  { href: "#work", label: "Work" },
-  { href: "#capabilities", label: "Capabilities" },
-  { href: "#process", label: "Process" },
-  { href: "#contact", label: "Start a project" },
+const SHEETS = [
+  ["00", "Title"],
+  ["01", "Existing conditions"],
+  ["02", "Exploded assembly"],
+  ["03", "As-built"],
+  ["04", "Sequence of works"],
+  ["05", "Tolerances & standards"],
+  ["06", "Request for proposal"],
 ]
 
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="glass-panel-strong relative border-x-0 border-b-0 px-7 pb-10 pt-20 text-white sm:px-12 lg:px-20 xl:px-28">
-      <div className="mx-auto max-w-[1400px]">
-        <div className="grid gap-12 md:grid-cols-[1.3fr_.7fr_.7fr]">
+    <footer className="border-t border-[var(--line-outline)] px-7 pb-10 pt-20 sm:px-12 lg:px-16 xl:px-24">
+      <div className="mx-auto max-w-[1600px]">
+        <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr_1fr]">
           <div>
-            <p className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-[0.28em]">MORPH</p>
-            <p className="mt-5 max-w-sm text-sm leading-6 text-white/40">
-              We design and build premium websites and digital products for
-              founders and businesses who need to be taken seriously online.
+            <p className="text-sm font-semibold tracking-[0.3em]">MORPH</p>
+            <p className="mt-5 max-w-xs leading-7 opacity-45">
+              A web design and engineering studio. We specify, build and
+              measure websites for people who need them to work.
             </p>
           </div>
 
           <div>
-            <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.3em] text-white/30">
-              Navigate
-            </p>
-            <ul className="space-y-3">
-              {links.map((link) => (
-                <li key={link.href}>
+            <p className="annotation mb-5 opacity-40">Drawing index</p>
+            <ul>
+              {SHEETS.map(([num, label]) => (
+                <li key={num}>
                   <a
-                    href={link.href}
-                    className="text-sm text-white/50 transition-colors hover:text-white"
+                    href={`#sheet-${num}`}
+                    className="annotation flex items-baseline gap-3 py-1.5 opacity-55 transition-opacity hover:opacity-100"
                   >
-                    {link.label}
+                    <span className="text-[var(--signal)]">{num}</span>
+                    <span>{label}</span>
                   </a>
                 </li>
               ))}
@@ -39,24 +41,24 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.3em] text-white/30">
-              Get in touch
-            </p>
+            <p className="annotation mb-5 opacity-40">Contact</p>
             <a
               href="mailto:hello@morph.studio"
-              className="text-sm text-white/50 transition-colors hover:text-white"
+              className="text-sm transition-colors hover:text-[var(--signal)]"
             >
               hello@morph.studio
             </a>
-            <p className="mt-4 text-sm leading-6 text-white/30">
+            <p className="mt-4 max-w-[22ch] leading-7 opacity-40">
               Replies within one business day.
             </p>
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-white/25 sm:flex-row sm:items-center sm:justify-between">
-          <p>&copy; {year} MORPH. All rights reserved.</p>
-          <p>Designed and built by MORPH.</p>
+        <div className="mt-16 flex flex-col gap-3 border-t border-[var(--line-construction)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="annotation opacity-35">
+            &copy; {year} MORPH — Rev A — Issued for review
+          </p>
+          <p className="annotation opacity-35">Drawn and built by MORPH</p>
         </div>
       </div>
     </footer>

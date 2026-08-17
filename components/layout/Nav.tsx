@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { motion, AnimatePresence } from "motion/react"
 
-const links = [
-  { href: "#work", label: "Work" },
-  { href: "#capabilities", label: "Capabilities" },
-  { href: "#process", label: "Process" },
+const SHEETS = [
+  { href: "#sheet-01", num: "01", label: "Existing" },
+  { href: "#sheet-02", num: "02", label: "Assembly" },
+  { href: "#sheet-03", num: "03", label: "As-Built" },
+  { href: "#sheet-04", num: "04", label: "Sequence" },
+  { href: "#sheet-05", num: "05", label: "Tolerances" },
 ]
 
 export default function Nav() {
@@ -20,70 +21,75 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const handleNavigate = (href: string) => {
+  const go = (href: string) => {
     setOpen(false)
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
   }
 
   return (
     <header
-      className={`glass-panel fixed inset-x-0 top-0 z-[100] transition-all duration-500 ${
-        scrolled ? "glass-panel-strong" : ""
+      className={`fixed inset-x-0 top-0 z-[100] transition-colors duration-300 ${
+        scrolled
+          ? "border-b border-[var(--line-outline)] bg-[rgba(11,12,14,0.82)] backdrop-blur-md"
+          : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-[1600px] items-center justify-between px-7 py-5 text-white sm:px-12 lg:px-20 xl:px-28">
+      <nav className="mx-auto flex max-w-[1600px] items-center justify-between gap-6 px-7 py-4 sm:px-12 lg:px-16 xl:px-24">
         <a
-          href="#top"
-          onClick={(event) => {
-            event.preventDefault()
-            handleNavigate("#top")
+          href="#sheet-00"
+          onClick={(e) => {
+            e.preventDefault()
+            go("#sheet-00")
           }}
-          className="font-[family-name:var(--font-space-grotesk)] text-sm font-semibold tracking-[0.28em]"
+          className="text-sm font-semibold tracking-[0.3em]"
         >
           MORPH
         </a>
 
-        <div className="hidden items-center gap-10 md:flex">
-          {links.map((link) => (
+        {/* Drawing index */}
+        <div className="hidden items-center gap-7 lg:flex">
+          {SHEETS.map((sheet) => (
             <a
-              key={link.href}
-              href={link.href}
-              onClick={(event) => {
-                event.preventDefault()
-                handleNavigate(link.href)
+              key={sheet.href}
+              href={sheet.href}
+              onClick={(e) => {
+                e.preventDefault()
+                go(sheet.href)
               }}
-              className="font-mono text-xs uppercase tracking-[0.25em] text-white/45 transition-colors hover:text-white"
+              className="annotation group flex items-baseline gap-2 opacity-45 transition-opacity hover:opacity-100"
             >
-              {link.label}
+              <span className="text-[var(--signal)]">{sheet.num}</span>
+              <span>{sheet.label}</span>
             </a>
           ))}
         </div>
 
         <div className="flex items-center gap-4">
           <a
-            href="#contact"
-            onClick={(event) => {
-              event.preventDefault()
-              handleNavigate("#contact")
+            href="#sheet-06"
+            onClick={(e) => {
+              e.preventDefault()
+              go("#sheet-06")
             }}
-            className="hidden rounded-full bg-white px-5 py-2.5 text-xs font-medium text-black transition-transform hover:-translate-y-0.5 sm:block"
+            className="hidden border border-[var(--signal)] px-5 py-2.5 text-xs font-medium text-[var(--signal)] transition-colors hover:bg-[var(--signal)] hover:text-white sm:block"
           >
             Start a project
           </a>
 
           <button
             type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((value) => !value)}
-            className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] md:hidden"
+            aria-label={open ? "Close index" : "Open index"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] lg:hidden"
           >
             <span
-              className={`h-px w-5 bg-white transition-transform ${
+              className={`h-px w-5 bg-current transition-transform ${
                 open ? "translate-y-[3px] rotate-45" : ""
               }`}
             />
             <span
-              className={`h-px w-5 bg-white transition-transform ${
+              className={`h-px w-5 bg-current transition-transform ${
                 open ? "-translate-y-[3px] -rotate-45" : ""
               }`}
             />
@@ -91,43 +97,36 @@ export default function Nav() {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="glass-panel-strong overflow-hidden md:hidden"
-          >
-            <div className="flex flex-col gap-1 px-7 py-6">
-              {links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(event) => {
-                    event.preventDefault()
-                    handleNavigate(link.href)
-                  }}
-                  className="py-3 text-sm uppercase tracking-[0.2em] text-white/60"
-                >
-                  {link.label}
-                </a>
-              ))}
+      {open && (
+        <div className="border-t border-[var(--line-outline)] bg-[rgba(11,12,14,0.96)] backdrop-blur-md lg:hidden">
+          <div className="px-7 py-4 sm:px-12">
+            {SHEETS.map((sheet) => (
               <a
-                href="#contact"
-                onClick={(event) => {
-                  event.preventDefault()
-                  handleNavigate("#contact")
+                key={sheet.href}
+                href={sheet.href}
+                onClick={(e) => {
+                  e.preventDefault()
+                  go(sheet.href)
                 }}
-                className="mt-3 rounded-full bg-white px-5 py-3 text-center text-sm font-medium text-black"
+                className="annotation flex items-baseline gap-3 border-b border-[var(--line-construction)] py-4 last:border-b-0"
               >
-                Start a project
+                <span className="text-[var(--signal)]">{sheet.num}</span>
+                <span className="opacity-70">{sheet.label}</span>
               </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            ))}
+            <a
+              href="#sheet-06"
+              onClick={(e) => {
+                e.preventDefault()
+                go("#sheet-06")
+              }}
+              className="mt-4 block border border-[var(--signal)] py-3 text-center text-sm text-[var(--signal)]"
+            >
+              Start a project
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

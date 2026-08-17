@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import Lenis from "lenis"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { scrollProgress } from "@/lib/scroll-scene"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -19,10 +18,7 @@ export default function SmoothScroll({
       smoothWheel: true,
     })
 
-    lenis.on("scroll", (instance: Lenis) => {
-      ScrollTrigger.update()
-      scrollProgress.value = instance.progress
-    })
+    lenis.on("scroll", ScrollTrigger.update)
 
     const update = (time: number) => {
       lenis.raf(time * 1000)
