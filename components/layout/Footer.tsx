@@ -1,38 +1,35 @@
-const SHEETS = [
-  ["00", "Title"],
-  ["01", "Existing conditions"],
-  ["02", "Exploded assembly"],
-  ["03", "As-built"],
-  ["04", "Sequence of works"],
-  ["05", "Tolerances & standards"],
-  ["06", "Request for proposal"],
+const LINKS = [
+  ["sys-outcomes", "Funnel"],
+  ["sys-stack", "Stack"],
+  ["sys-work", "Work"],
+  ["sys-proof", "Measured"],
+  ["sys-start", "Start a project"],
 ]
 
 export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-[var(--line-outline)] px-7 pb-10 pt-20 sm:px-12 lg:px-16 xl:px-24">
+    <footer className="border-t border-[var(--line)] px-7 pb-10 pt-20 sm:px-12 lg:px-16 xl:px-24">
       <div className="mx-auto max-w-[1600px]">
         <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr_1fr]">
           <div>
             <p className="text-sm font-semibold tracking-[0.3em]">MORPH</p>
             <p className="mt-5 max-w-xs leading-7 opacity-45">
-              A web design and engineering studio. We specify, build and
-              measure websites for people who need them to work.
+              A web engineering studio. Real-time 3D, custom shaders and
+              interfaces built to perform under real traffic.
             </p>
           </div>
 
           <div>
-            <p className="annotation mb-5 opacity-40">Drawing index</p>
+            <p className="mono text-[10px] uppercase tracking-[0.2em] mb-5 opacity-40">Navigate</p>
             <ul>
-              {SHEETS.map(([num, label]) => (
-                <li key={num}>
+              {LINKS.map(([id, label]) => (
+                <li key={id}>
                   <a
-                    href={`#sheet-${num}`}
-                    className="annotation flex items-baseline gap-3 py-1.5 opacity-55 transition-opacity hover:opacity-100"
+                    href={`#${id}`}
+                    className="mono text-[10px] uppercase tracking-[0.2em] flex items-baseline gap-3 py-1.5 opacity-55 transition-opacity hover:opacity-100"
                   >
-                    <span className="text-[var(--signal)]">{num}</span>
                     <span>{label}</span>
                   </a>
                 </li>
@@ -41,7 +38,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="annotation mb-5 opacity-40">Contact</p>
+            <p className="mono text-[10px] uppercase tracking-[0.2em] mb-5 opacity-40">Contact</p>
             <a
               href="mailto:hello@morph.studio"
               className="text-sm transition-colors hover:text-[var(--signal)]"
@@ -54,11 +51,11 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-[var(--line-construction)] pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="annotation opacity-35">
-            &copy; {year} MORPH — Rev A — Issued for review
+        <div className="mt-16 flex flex-col gap-3 border-t border-[var(--line)] pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="mono text-[10px] uppercase tracking-[0.2em] opacity-35">
+            &copy; {year} MORPH
           </p>
-          <p className="annotation opacity-35">Drawn and built by MORPH</p>
+          <p className="mono text-[10px] uppercase tracking-[0.2em] opacity-35">Designed and engineered by MORPH</p>
         </div>
       </div>
     </footer>

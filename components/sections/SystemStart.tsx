@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
-import SheetHeader from "@/components/draft/SheetHeader"
 
 const projectTypes = [
   "Landing page",
@@ -82,7 +81,7 @@ function Option({
       className={`group flex items-center gap-3 border px-4 py-3 text-sm transition-colors ${
         active
           ? "border-[var(--signal)] text-[var(--signal)]"
-          : "border-[var(--line-construction)] opacity-70 hover:border-[var(--line-outline)] hover:opacity-100"
+          : "border-[var(--line)] opacity-70 hover:border-[var(--line-strong)] hover:opacity-100"
       }`}
     >
       {/* Filled square marker, the way a spec sheet is ticked */}
@@ -90,7 +89,7 @@ function Option({
         className={`h-2.5 w-2.5 shrink-0 border transition-colors ${
           active
             ? "border-[var(--signal)] bg-[var(--signal)]"
-            : "border-[var(--line-outline)]"
+            : "border-[var(--line-strong)]"
         }`}
       />
       {label}
@@ -99,9 +98,9 @@ function Option({
 }
 
 const fieldClass =
-  "w-full border-b border-[var(--line-outline)] bg-transparent px-1 py-3 text-[15px] outline-none transition-colors placeholder:opacity-30 focus:border-[var(--signal)]"
+  "w-full border-b border-[var(--line-strong)] bg-transparent px-1 py-3 text-[15px] outline-none transition-colors placeholder:opacity-30 focus:border-[var(--signal)]"
 
-export default function SheetProposal() {
+export default function SystemStart() {
   const [step, setStep] = useState(1)
   const [form, setForm] = useState<FormState>(initialState)
   const [status, setStatus] = useState<"idle" | "submitting" | "done" | "error">(
@@ -144,34 +143,31 @@ export default function SheetProposal() {
 
   return (
     <section
-      id="sheet-06"
-      className="graph-paper relative px-7 py-28 sm:px-12 lg:px-16 xl:px-24"
+      id="sys-start"
+      className="relative flex min-h-screen items-center px-6 py-28 sm:px-10 lg:px-14 xl:px-20"
     >
-      <div className="mx-auto max-w-[1100px]">
-        <SheetHeader
-          number="06"
-          title="Request for Proposal"
-          note="Four fields, no obligation"
-        />
-
-        <div className="mb-14 grid gap-8 lg:grid-cols-[1fr_1fr] lg:gap-20">
-          <h2 className="max-w-[13ch] text-[clamp(2.2rem,4vw,3.6rem)] font-semibold leading-[1.02] tracking-[-0.03em]">
-            Fill in the title block.
+      <div className="mx-auto w-full max-w-[1100px]">
+        <div className="readable mb-12">
+          <span className="mono text-[10px] uppercase tracking-[0.28em] text-[var(--signal)]">
+            Input required
+          </span>
+          <h2 className="mt-6 max-w-[13ch] text-[clamp(2.2rem,4.4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
+            Tell the system what to build.
           </h2>
-          <p className="max-w-md self-end text-lg leading-8 opacity-55">
-            Tell us what you are building and we will come back within one
-            business day with a view on scope, timeline and cost.
+          <p className="mt-7 max-w-lg text-lg leading-8 opacity-55">
+            Four questions. We reply within one business day with a view on
+            scope, timeline and cost.
           </p>
         </div>
 
-        <div className="border border-[var(--line-outline)]">
+        <div className="panel">
           {status === "done" ? (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col items-start px-8 py-20 lg:px-12"
             >
-              <span className="annotation text-[var(--signal)]">
+              <span className="mono text-[10px] uppercase tracking-[0.2em] text-[var(--signal)]">
                 Received — logged for review
               </span>
               <h3 className="mt-6 text-3xl font-medium tracking-[-0.02em]">
@@ -185,7 +181,7 @@ export default function SheetProposal() {
           ) : (
             <>
               {/* Sheet tabs double as the progress indicator */}
-              <div className="grid grid-cols-4 border-b border-[var(--line-outline)]">
+              <div className="grid grid-cols-4 border-b border-[var(--line-strong)]">
                 {STEP_TITLES.map((title, i) => {
                   const index = i + 1
                   const isDone = index < step
@@ -193,12 +189,12 @@ export default function SheetProposal() {
                   return (
                     <div
                       key={title}
-                      className={`border-r border-[var(--line-construction)] px-4 py-4 last:border-r-0 ${
-                        isCurrent ? "bg-[#111216]" : ""
+                      className={`border-r border-[var(--line)] px-4 py-4 last:border-r-0 ${
+                        isCurrent ? "bg-white/[0.05]" : ""
                       }`}
                     >
                       <span
-                        className={`annotation ${
+                        className={`mono text-[10px] uppercase tracking-[0.2em] ${
                           isCurrent
                             ? "text-[var(--signal)]"
                             : isDone
@@ -257,7 +253,7 @@ export default function SheetProposal() {
                     >
                       <label
                         htmlFor="rfp-business"
-                        className="annotation mb-2 block opacity-45"
+                        className="mono text-[10px] uppercase tracking-[0.2em] mb-2 block opacity-45"
                       >
                         What does your business do?
                       </label>
@@ -276,7 +272,7 @@ export default function SheetProposal() {
 
                       <p className="mb-7 text-lg">
                         What should it achieve?{" "}
-                        <span className="annotation opacity-40">
+                        <span className="mono text-[10px] uppercase tracking-[0.2em] opacity-40">
                           select any
                         </span>
                       </p>
@@ -301,7 +297,7 @@ export default function SheetProposal() {
                       exit={{ opacity: 0, x: -14 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <p className="annotation mb-4 opacity-45">Level</p>
+                      <p className="mono text-[10px] uppercase tracking-[0.2em] mb-4 opacity-45">Level</p>
                       <div className="mb-9 flex flex-wrap gap-3">
                         {levels.map((level) => (
                           <Option
@@ -313,7 +309,7 @@ export default function SheetProposal() {
                         ))}
                       </div>
 
-                      <p className="annotation mb-4 opacity-45">
+                      <p className="mono text-[10px] uppercase tracking-[0.2em] mb-4 opacity-45">
                         Approximate budget
                       </p>
                       <div className="mb-9 flex flex-wrap gap-3">
@@ -327,7 +323,7 @@ export default function SheetProposal() {
                         ))}
                       </div>
 
-                      <p className="annotation mb-4 opacity-45">Timeline</p>
+                      <p className="mono text-[10px] uppercase tracking-[0.2em] mb-4 opacity-45">Timeline</p>
                       <div className="flex flex-wrap gap-3">
                         {timelines.map((timeline) => (
                           <Option
@@ -358,7 +354,7 @@ export default function SheetProposal() {
                         <div>
                           <label
                             htmlFor="rfp-name"
-                            className="annotation mb-1 block opacity-45"
+                            className="mono text-[10px] uppercase tracking-[0.2em] mb-1 block opacity-45"
                           >
                             Name
                           </label>
@@ -378,7 +374,7 @@ export default function SheetProposal() {
                         <div>
                           <label
                             htmlFor="rfp-email"
-                            className="annotation mb-1 block opacity-45"
+                            className="mono text-[10px] uppercase tracking-[0.2em] mb-1 block opacity-45"
                           >
                             Email
                           </label>
@@ -409,11 +405,11 @@ export default function SheetProposal() {
                 </AnimatePresence>
               </div>
 
-              <div className="flex items-center justify-between border-t border-[var(--line-outline)] px-8 py-5 lg:px-12">
+              <div className="flex items-center justify-between border-t border-[var(--line-strong)] px-8 py-5 lg:px-12">
                 <button
                   type="button"
                   onClick={() => setStep((s) => Math.max(1, s - 1))}
-                  className={`annotation transition-opacity hover:opacity-100 ${
+                  className={`mono text-[10px] uppercase tracking-[0.2em] transition-opacity hover:opacity-100 ${
                     step === 1 ? "invisible" : "opacity-50"
                   }`}
                 >
@@ -425,7 +421,7 @@ export default function SheetProposal() {
                     type="button"
                     disabled={!canAdvance()}
                     onClick={() => setStep((s) => Math.min(totalSteps, s + 1))}
-                    className="border border-[var(--signal)] bg-[var(--signal)] px-7 py-3 text-sm font-medium text-white transition-colors hover:bg-transparent hover:text-[var(--signal)] disabled:cursor-not-allowed disabled:border-[var(--line-construction)] disabled:bg-transparent disabled:text-current disabled:opacity-25"
+                    className="cta !px-7 !py-3 !text-sm disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-transparent disabled:text-current disabled:opacity-25"
                   >
                     Continue
                   </button>
@@ -438,7 +434,7 @@ export default function SheetProposal() {
                       status === "submitting"
                     }
                     onClick={handleSubmit}
-                    className="border border-[var(--signal)] bg-[var(--signal)] px-7 py-3 text-sm font-medium text-white transition-colors hover:bg-transparent hover:text-[var(--signal)] disabled:cursor-not-allowed disabled:border-[var(--line-construction)] disabled:bg-transparent disabled:text-current disabled:opacity-25"
+                    className="cta !px-7 !py-3 !text-sm disabled:cursor-not-allowed disabled:border-[var(--line)] disabled:bg-transparent disabled:text-current disabled:opacity-25"
                   >
                     {status === "submitting" ? "Sending…" : "Submit brief"}
                   </button>
