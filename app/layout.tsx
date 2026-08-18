@@ -15,9 +15,12 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MORPH — Websites Engineered to Sell",
+  title: {
+    default: "MORPH — Creative Development & Digital Experiences",
+    template: "%s | MORPH",
+  },
   description:
-    "MORPH is a web design and engineering studio for founders and businesses. Strategy, interface, motion and performance — specified, built and measured like engineering work.",
+    "MORPH builds distinctive digital experiences through product design, creative frontend engineering, motion and interactive systems.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
