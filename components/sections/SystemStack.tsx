@@ -15,173 +15,114 @@ const NODES: Node[] = [
   {
     id: "webgl",
     label: "Real-time 3D",
-    headline: "GPU-side geometry, not video",
-    body: "Instanced meshes morphed in a vertex shader. Thousands of modules move for the cost of one draw call, which is why the counter beside the hero stays low.",
-    code: [
-      "float m = clamp((uMix - lead) / 0.65, 0.0, 1.0);",
-      "m = m * m * (3.0 - 2.0 * m);",
-      "vec3 base = mix(aFrom, aTo, m);",
-    ],
-  },
-  {
-    id: "shaders",
-    label: "Custom shaders",
-    headline: "Materials written, not downloaded",
-    body: "Refraction, dissolve, displacement and colour grading authored in GLSL for the specific brand, instead of a preset every other site is also using.",
-    code: [
-      "float hot = smoothstep(0.82, 1.0, vSeed);",
-      "vec3 color = mix(uInk, uSignal, hot);",
-      "gl_FragColor = vec4(color, vFade);",
-    ],
-  },
-  {
-    id: "perf",
-    label: "Performance",
-    headline: "Budgets, enforced in code",
-    body: "Adaptive quality tiers, instanced draws, demand-driven frameloops. The scene downgrades itself on weak hardware rather than stuttering.",
-    code: [
-      "const tier = cores <= 4 || saveData",
-      "  ? 'minimal'",
-      "  : width < 1024 ? 'reduced' : 'full';",
-    ],
+    headline: "Build the thing that cannot be faked with a video.",
+    body: "Interactive geometry, particles and materials rendered in the browser and tied to the experience, not pasted over it.",
+    code: ["Instanced geometry", "Custom shaders", "Adaptive quality tiers"],
   },
   {
     id: "motion",
     label: "Motion systems",
-    headline: "Scroll as a timeline",
-    body: "Lenis driving GSAP ScrollTrigger, so scroll position is a value you can choreograph against rather than a series of jumps.",
-    code: [
-      "lenis.on('scroll', ScrollTrigger.update);",
-      "gsap.ticker.add((t) => lenis.raf(t * 1000));",
-      "gsap.ticker.lagSmoothing(0);",
-    ],
+    headline: "Movement should explain structure, not decorate it.",
+    body: "Scroll, transitions and state changes are choreographed as one motion language with reduced-motion behaviour built in from the start.",
+    code: ["GSAP / Motion", "Lenis", "Reduced-motion fallback"],
   },
   {
-    id: "a11y",
-    label: "Accessibility",
-    headline: "The whole thing has an off switch",
-    body: "Every animation is gated on prefers-reduced-motion, all text is real DOM, and contrast is checked against the live background, not a flat mock.",
-    code: [
-      "const reduced = useReducedMotion();",
-      "<SystemCore motion={!reduced} />",
-    ],
+    id: "product",
+    label: "Digital products",
+    headline: "Interfaces people can actually live inside.",
+    body: "Product surfaces, dashboards, commerce and bespoke tools where visual ambition still has to survive repeated daily use.",
+    code: ["Next.js / React", "Typed systems", "Reusable design logic"],
   },
   {
-    id: "backend",
-    label: "Backend & data",
-    headline: "Wired to something real",
-    body: "Route handlers, validated payloads, typed schemas and a deployment pipeline. The form on this page posts to a real endpoint that rejects malformed input.",
-    code: [
-      "export async function POST(req: Request) {",
-      "  if (!isValidPayload(body))",
-      "    return Response.json({ error }, { status: 400 });",
-      "}",
-    ],
+    id: "creative",
+    label: "Creative direction",
+    headline: "One visual idea strong enough to carry the whole experience.",
+    body: "Concept, art direction, typography, composition and interaction are developed together so the final site does not feel assembled from trends.",
+    code: ["Concept systems", "Art direction", "Responsive composition"],
+  },
+  {
+    id: "ai",
+    label: "AI & automation",
+    headline: "Intelligence where it creates leverage, not where it creates noise.",
+    body: "AI-assisted workflows, automation and product features are integrated when they improve the actual service or user experience.",
+    code: ["Workflow automation", "Model integration", "Operational tooling"],
+  },
+  {
+    id: "performance",
+    label: "Performance",
+    headline: "Ambition gets a budget.",
+    body: "The experience is designed around real constraints: loading, frame time, mobile hardware, accessibility and production reliability.",
+    code: ["Core Web Vitals", "Progressive quality", "Accessibility gates"],
   },
 ]
 
 export default function SystemStack() {
-  const [open, setOpen] = useState<string>("webgl")
+  const [open, setOpen] = useState<string>(NODES[0].id)
+  const active = NODES.find((node) => node.id === open) ?? NODES[0]
 
   return (
     <section
       id="sys-stack"
-      className="relative flex min-h-screen items-center px-6 py-28 sm:px-10 lg:px-14 xl:px-20"
+      className="relative border-b border-[var(--line)] px-5 py-28 sm:px-8 lg:px-12 lg:py-40 xl:px-16"
     >
-      <div className="mx-auto w-full max-w-[1700px]">
-        <div className="mb-14 flex flex-wrap items-end justify-between gap-8">
-          <div className="readable">
-            <span className="mono text-[10px] uppercase tracking-[0.28em] text-[var(--signal)]">
-              Architecture / nodes
-            </span>
-            <h2 className="mt-6 max-w-[15ch] text-[clamp(2.2rem,4.4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
-              Open any node. The code is the argument.
-            </h2>
+      <div className="mx-auto w-full max-w-[1800px]">
+        <div className="grid gap-10 border-b border-[var(--line)] pb-14 lg:grid-cols-[0.55fr_1.45fr] lg:items-end lg:pb-20">
+          <div>
+            <span className="mono text-[9px] uppercase tracking-[0.22em] text-[var(--signal)]">Capabilities / 06</span>
+            <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.15em] opacity-35">
+              Design, engineering and production are one continuous system.
+            </p>
           </div>
-          <p className="mono max-w-xs text-[11px] leading-5 opacity-35">
-            Six subsystems. Select one to inspect what it does and what it is
-            written in.
-          </p>
+          <h2 className="max-w-[10ch] text-[clamp(3.4rem,8vw,9rem)] font-black uppercase leading-[0.79] tracking-[-0.065em]">
+            Built for the hard part.
+          </h2>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
-          {/* Node list doubles as the navigation — no buttons needed */}
-          <div className="panel divide-y divide-[var(--line)]">
-            {NODES.map((node, i) => {
-              const active = open === node.id
+        <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="border-r-0 border-[var(--line)] lg:border-r">
+            {NODES.map((node, index) => {
+              const isActive = node.id === open
               return (
                 <button
                   key={node.id}
                   type="button"
                   onClick={() => setOpen(node.id)}
-                  aria-expanded={active}
-                  className={`flex w-full items-center gap-4 px-5 py-5 text-left transition-colors ${
-                    active ? "bg-white/[0.04]" : "hover:bg-white/[0.02]"
-                  }`}
+                  className="group grid w-full grid-cols-[46px_1fr_auto] items-center gap-3 border-b border-[var(--line)] py-6 pr-4 text-left sm:grid-cols-[72px_1fr_auto] lg:py-8"
+                  aria-pressed={isActive}
                 >
-                  <span
-                    className={`mono text-[10px] ${
-                      active ? "text-[var(--signal)]" : "opacity-30"
-                    }`}
-                  >
-                    {String(i + 1).padStart(2, "0")}
+                  <span className={`mono text-[9px] ${isActive ? "text-[var(--signal)]" : "opacity-25"}`}>
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                  <span
-                    className={`h-1.5 w-1.5 rounded-full transition-colors ${
-                      active ? "bg-[var(--signal)]" : "bg-white/20"
-                    }`}
-                  />
-                  <span
-                    className={`text-[15px] transition-opacity ${
-                      active ? "" : "opacity-55"
-                    }`}
-                  >
+                  <span className={`text-[clamp(1.4rem,2.4vw,2.6rem)] font-semibold tracking-[-0.045em] transition-opacity ${isActive ? "opacity-100" : "opacity-45 group-hover:opacity-80"}`}>
                     {node.label}
                   </span>
-                  <span
-                    className={`mono ml-auto text-[10px] transition-opacity ${
-                      active ? "text-[var(--signal)]" : "opacity-0"
-                    }`}
-                  >
-                    ACTIVE
-                  </span>
+                  <span className={`text-xl transition-transform ${isActive ? "rotate-45 text-[var(--signal)]" : "opacity-25 group-hover:opacity-70"}`}>+</span>
                 </button>
               )
             })}
           </div>
 
-          <div className="panel relative min-h-[420px] overflow-hidden p-7 lg:p-9">
+          <div className="relative min-h-[430px] px-0 py-10 sm:py-12 lg:flex lg:min-h-[620px] lg:items-end lg:px-12 lg:py-14 xl:px-16">
             <AnimatePresence mode="wait">
-              {NODES.filter((n) => n.id === open).map((node) => (
-                <motion.div
-                  key={node.id}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <span className="mono text-[10px] uppercase tracking-[0.24em] text-[var(--signal)]">
-                    {node.label}
-                  </span>
-
-                  <h3 className="mt-5 max-w-[18ch] text-2xl font-medium leading-[1.15] tracking-[-0.02em] md:text-3xl">
-                    {node.headline}
-                  </h3>
-
-                  <p className="mt-5 max-w-lg leading-7 opacity-50">
-                    {node.body}
-                  </p>
-
-                  <div className="mt-8 border-t border-[var(--line)] pt-5">
-                    <span className="mono text-[10px] uppercase tracking-[0.2em] opacity-30">
-                      From this page
-                    </span>
-                    <pre className="mono mt-3 overflow-x-auto text-[11.5px] leading-[1.9] text-[var(--data)]">
-                      {node.code.join("\n")}
-                    </pre>
-                  </div>
-                </motion.div>
-              ))}
+              <motion.div
+                key={active.id}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-2xl"
+              >
+                <span className="mono text-[9px] uppercase tracking-[0.2em] text-[var(--signal)]">{active.label}</span>
+                <h3 className="mt-5 text-[clamp(2.3rem,5vw,5.5rem)] font-semibold leading-[0.92] tracking-[-0.06em]">
+                  {active.headline}
+                </h3>
+                <p className="mt-7 max-w-xl text-base leading-7 opacity-48 sm:text-lg sm:leading-8">
+                  {active.body}
+                </p>
+                <div className="mono mt-9 flex flex-wrap gap-x-6 gap-y-3 border-t border-[var(--line)] pt-5 text-[9px] uppercase tracking-[0.17em] opacity-35">
+                  {active.code.map((item) => <span key={item}>{item}</span>)}
+                </div>
+              </motion.div>
             </AnimatePresence>
           </div>
         </div>
