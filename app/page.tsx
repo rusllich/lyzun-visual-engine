@@ -1,18 +1,29 @@
-import Hero from "@/components/sections/Hero"
-import Experience from "@/components/sections/Experience"
 import SmoothScroll from "@/components/providers/SmoothScroll"
-import CustomCursor from "@/components/effects/CustomCursor"
-import InteractiveShowcase from "@/components/sections/InteractiveShowcase"
+import LiveSystemShell from "@/components/LiveSystemShell"
+import Nav from "@/components/layout/Nav"
+import Footer from "@/components/layout/Footer"
+import SystemHero from "@/components/sections/SystemHero"
+import SystemOutcomes from "@/components/sections/SystemOutcomes"
+import SystemStack from "@/components/sections/SystemStack"
+import SystemWork from "@/components/sections/SystemWork"
+import SystemProof from "@/components/sections/SystemProof"
+import SystemStart from "@/components/sections/SystemStart"
 
 export default function Home() {
   return (
     <SmoothScroll>
-      <main className="min-h-screen bg-[#030303]">
-        <CustomCursor />
-        <Hero />
-        <Experience />
-        <InteractiveShowcase />
-      </main>
+      <LiveSystemShell>
+        <Nav />
+        <main>
+          <SystemHero />
+          <SystemOutcomes />
+          <SystemStack />
+          <SystemWork />
+          <SystemProof />
+          <SystemStart />
+        </main>
+        <Footer />
+      </LiveSystemShell>
     </SmoothScroll>
   )
 }
