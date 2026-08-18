@@ -1,0 +1,28 @@
+{
+  "name": "creative-web-engine-v2",
+  "version": "2.0.0",
+  "skills": [
+    "skills/orchestrator.md",
+    "skills/strategy.md",
+    "skills/reference-intelligence.md",
+    "skills/creative-director.md",
+    "skills/ux-conversion.md",
+    "skills/design-system.md",
+    "skills/motion.md",
+    "skills/webgl-3d.md",
+    "skills/frontend.md",
+    "skills/performance-security.md",
+    "skills/qa-art-director.md",
+    "skills/release-analytics.md"
+  ],
+  "workflows": [
+    "workflows/new-project.md",
+    "workflows/existing-project.md"
+  ],
+  "templates": [
+    "templates/handoff.md",
+    "templates/decision-log.md",
+    "templates/risk-register.md",
+    "templates/release-gate-checklist.md"
+  ]
+}
