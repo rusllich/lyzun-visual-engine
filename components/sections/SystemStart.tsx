@@ -41,19 +41,19 @@ function Choice({ label, active, onClick }: { label: string; active: boolean; on
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      className={`flex min-h-12 items-center justify-between gap-5 border px-4 py-3 text-left text-sm transition-colors ${
+      className={`flex min-h-12 items-center justify-between gap-5 border px-4 py-3 text-left text-sm transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--signal)] ${
         active
           ? "border-[var(--signal)] bg-[var(--signal)] text-[#050607]"
           : "border-[var(--line)] bg-transparent opacity-58 hover:border-[var(--line-strong)] hover:opacity-100"
       }`}
     >
       <span>{label}</span>
-      <span className="mono text-[9px]">{active ? "●" : "+"}</span>
+      <span className="mono text-[9px]" aria-hidden="true">{active ? "●" : "+"}</span>
     </button>
   )
 }
 
-const inputClass = "w-full border-b border-[var(--line-strong)] bg-transparent py-4 text-lg tracking-[-0.02em] outline-none placeholder:opacity-25 focus:border-[var(--signal)]"
+const inputClass = "w-full border-b border-[var(--line-strong)] bg-transparent py-4 text-lg tracking-[-0.02em] outline-none placeholder:opacity-25 focus:border-[var(--signal)] focus-visible:ring-1 focus-visible:ring-[var(--signal)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--ground)]"
 
 export default function SystemStart() {
   const [step, setStep] = useState(1)
@@ -88,20 +88,20 @@ export default function SystemStart() {
   }
 
   return (
-    <section id="sys-start" className="relative px-5 py-28 sm:px-8 lg:px-12 lg:py-40 xl:px-16">
+    <section id="sys-start" aria-labelledby="project-brief-title" className="relative px-5 py-28 sm:px-8 lg:px-12 lg:py-40 xl:px-16">
       <div className="mx-auto w-full max-w-[1800px]">
         <div className="grid gap-10 border-b border-[var(--line)] pb-16 lg:grid-cols-[0.42fr_1.58fr] lg:items-end lg:pb-24">
           <div>
             <span className="mono text-[9px] uppercase tracking-[0.22em] text-[var(--signal)]">Start / project brief</span>
             <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.15em] opacity-35">Four short steps. Enough context to have a useful first conversation.</p>
           </div>
-          <h2 className="max-w-[9.5ch] text-[clamp(3.7rem,9vw,10rem)] font-black uppercase leading-[0.76] tracking-[-0.07em]">
+          <h2 id="project-brief-title" className="max-w-[9.5ch] text-[clamp(3.7rem,9vw,10rem)] font-black uppercase leading-[0.76] tracking-[-0.07em]">
             Bring us something <span className="text-[var(--signal)]">difficult.</span>
           </h2>
         </div>
 
         {status === "done" ? (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid min-h-[500px] place-items-center border-b border-[var(--line)] py-20 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="grid min-h-[500px] place-items-center border-b border-[var(--line)] py-20 text-center" role="status" aria-live="polite">
             <div>
               <span className="mono text-[9px] uppercase tracking-[0.2em] text-[var(--signal)]">Brief received</span>
               <h3 className="mt-6 text-[clamp(2.8rem,7vw,7rem)] font-black uppercase leading-[0.8] tracking-[-0.065em]">We&apos;ll read it properly.</h3>
@@ -113,13 +113,15 @@ export default function SystemStart() {
             <div className="border-b border-[var(--line)] py-8 lg:border-b-0 lg:border-r lg:py-12 lg:pr-10">
               <div className="sticky top-28">
                 <p className="mono text-[9px] uppercase tracking-[0.2em] opacity-30">Progress</p>
-                <div className="mt-5 flex gap-2 lg:flex-col lg:gap-3">
+                <div className="mt-5 flex gap-2 lg:flex-col lg:gap-3" aria-label="Project brief progress">
                   {[1, 2, 3, 4].map((number) => (
                     <button
                       key={number}
                       type="button"
                       onClick={() => number < step && setStep(number)}
-                      className={`mono flex items-center gap-3 text-[9px] uppercase tracking-[0.17em] ${number === step ? "text-[var(--signal)]" : number < step ? "opacity-60" : "opacity-20"}`}
+                      disabled={number >= step}
+                      aria-current={number === step ? "step" : undefined}
+                      className={`mono flex items-center gap-3 text-[9px] uppercase tracking-[0.17em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)] ${number === step ? "text-[var(--signal)]" : number < step ? "opacity-60 hover:opacity-100" : "opacity-20"}`}
                     >
                       <span>{String(number).padStart(2, "0")}</span>
                       <span className="hidden lg:inline">{["Project", "Outcome", "Constraints", "Contact"][number - 1]}</span>
@@ -143,7 +145,8 @@ export default function SystemStart() {
                   <motion.div key="two" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                     <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">02 / What has to change?</p>
                     <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Give us the business, then the outcome.</h3>
-                    <input value={form.businessName} onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))} placeholder="What does the business / product do?" className={`${inputClass} mt-9`} />
+                    <label htmlFor="brief-business" className="sr-only">What does the business or product do?</label>
+                    <input id="brief-business" value={form.businessName} onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))} placeholder="What does the business / product do?" autoComplete="organization" className={`${inputClass} mt-9`} />
                     <div className="mt-9 grid gap-3 sm:grid-cols-2">{goals.map((item) => <Choice key={item} label={item} active={form.goals.includes(item)} onClick={() => toggleGoal(item)} />)}</div>
                   </motion.div>
                 )}
@@ -166,16 +169,22 @@ export default function SystemStart() {
                     <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">04 / Who do we reply to?</p>
                     <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">No sales maze. Just a useful reply.</h3>
                     <div className="mt-10 grid gap-8 sm:grid-cols-2">
-                      <input value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Your name" className={inputClass} />
-                      <input type="email" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} placeholder="you@company.com" className={inputClass} />
+                      <div>
+                        <label htmlFor="brief-name" className="sr-only">Your name</label>
+                        <input id="brief-name" value={form.name} onChange={(event) => setForm((current) => ({ ...current, name: event.target.value }))} placeholder="Your name" autoComplete="name" className={inputClass} />
+                      </div>
+                      <div>
+                        <label htmlFor="brief-email" className="sr-only">Email address</label>
+                        <input id="brief-email" type="email" value={form.email} onChange={(event) => setForm((current) => ({ ...current, email: event.target.value }))} placeholder="you@company.com" autoComplete="email" inputMode="email" className={inputClass} />
+                      </div>
                     </div>
-                    {status === "error" && <p className="mt-6 text-sm text-[var(--signal)]">The brief did not send. Please try again.</p>}
+                    {status === "error" && <p className="mt-6 text-sm text-[var(--signal)]" role="alert">The brief did not send. Please try again.</p>}
                   </motion.div>
                 )}
               </AnimatePresence>
 
               <div className="mt-12 flex items-center justify-between border-t border-[var(--line)] pt-6">
-                <button type="button" onClick={() => setStep((current) => Math.max(1, current - 1))} className={`mono text-[9px] uppercase tracking-[0.18em] opacity-45 ${step === 1 ? "invisible" : ""}`}>← Back</button>
+                <button type="button" onClick={() => setStep((current) => Math.max(1, current - 1))} className={`mono text-[9px] uppercase tracking-[0.18em] opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)] ${step === 1 ? "invisible" : ""}`}>← Back</button>
                 {step < 4 ? (
                   <button type="button" disabled={!canAdvance} onClick={() => setStep((current) => Math.min(4, current + 1))} className="cta disabled:cursor-not-allowed disabled:opacity-20">Continue ↗</button>
                 ) : (
