@@ -61,7 +61,7 @@ export default function SystemHero() {
           {[
             ["60", "FPS target"],
             ["<2.5s", "LCP target"],
-            ["AAA", "Accessibility intent"],
+            ["AA", "WCAG 2.2 target"],
             ["Live", "Browser-rendered 3D"],
           ].map(([value, label]) => (
             <div key={label} className="border-b border-[var(--line)] py-4 sm:border-r sm:px-5 sm:first:pl-0 lg:border-b-0">
