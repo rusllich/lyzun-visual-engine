@@ -41,7 +41,7 @@ export default function Footer() {
               <a href="mailto:hello@morph.studio" className="text-sm transition-colors hover:text-[var(--signal)]">
                 hello@morph.studio
               </a>
-              <p className="mono mt-4 text-[9px] uppercase leading-5 tracking-[0.15em] opacity-30">Kyiv / Lviv / Remote</p>
+              <p className="mono mt-4 text-[9px] uppercase leading-5 tracking-[0.15em] opacity-30">Ukraine / Remote</p>
             </div>
           </div>
         </div>
