@@ -13,8 +13,9 @@ export default function Home() {
   return (
     <SmoothScroll>
       <LiveSystemShell>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         <Nav />
-        <main>
+        <main id="main-content" tabIndex={-1}>
           <SystemHero />
           <SystemOutcomes />
           <SystemStack />
