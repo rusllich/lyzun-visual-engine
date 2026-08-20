@@ -21,8 +21,10 @@ function isValidPayload(value: unknown): value is ContactPayload {
   return (
     typeof payload.name === "string" &&
     payload.name.trim().length > 0 &&
+    payload.name.trim().length <= 120 &&
     typeof payload.email === "string" &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)
+    payload.email.trim().length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email.trim())
   )
 }
 
@@ -30,8 +32,8 @@ function formatLead(payload: ContactPayload) {
   return [
     "New MORPH project enquiry",
     "",
-    `Name: ${payload.name}`,
-    `Email: ${payload.email}`,
+    `Name: ${payload.name.trim()}`,
+    `Email: ${payload.email.trim()}`,
     `Business: ${payload.businessName || "—"}`,
     `Project type: ${payload.projectType || "—"}`,
     `Goals: ${payload.goals?.length ? payload.goals.join(", ") : "—"}`,
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
 
   if (!isValidPayload(body)) {
     return Response.json(
-      { error: "Missing required fields" },
+      { error: "Missing or invalid required fields" },
       { status: 400 }
     )
   }

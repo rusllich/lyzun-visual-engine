@@ -46,6 +46,10 @@
     text-decoration: none;
   }
 
+  [id^="sys-"] {
+    scroll-margin-top: 6.5rem;
+  }
+
   ::selection {
     background: var(--signal);
     color: #050607;
@@ -53,6 +57,28 @@
 }
 
 @layer components {
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 999;
+    transform: translateY(-200%);
+    background: var(--signal);
+    color: #050607;
+    padding: 0.8rem 1rem;
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+  }
+
   .mono {
     font-family: var(--font-plex-mono), ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
