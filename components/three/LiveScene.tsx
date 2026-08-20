@@ -1,7 +1,7 @@
 "use client"
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import SystemCore from "@/components/three/SystemCore"
 import { telemetry } from "@/lib/telemetry"
 
@@ -41,6 +41,20 @@ function TelemetryProbe() {
   return null
 }
 
+function usePageVisible() {
+  const [visible, setVisible] = useState(() =>
+    typeof document === "undefined" ? true : document.visibilityState === "visible",
+  )
+
+  useEffect(() => {
+    const sync = () => setVisible(document.visibilityState === "visible")
+    document.addEventListener("visibilitychange", sync)
+    return () => document.removeEventListener("visibilitychange", sync)
+  }, [])
+
+  return visible
+}
+
 type Props = {
   formation: number
   count: number
@@ -49,14 +63,18 @@ type Props = {
 }
 
 export default function LiveScene({ formation, count, motion, dpr }: Props) {
+  const pageVisible = usePageVisible()
+  const animate = motion && pageVisible
+
   return (
     <Canvas
       camera={{ position: [0, 0, 9.5], fov: 45 }}
       dpr={dpr}
+      frameloop={animate ? "always" : "demand"}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
     >
       <TelemetryProbe />
-      <SystemCore formation={formation} count={count} motion={motion} />
+      <SystemCore formation={formation} count={count} motion={animate} />
     </Canvas>
   )
 }

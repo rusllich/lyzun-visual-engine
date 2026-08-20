@@ -7,89 +7,70 @@ import { useInView } from "@/lib/use-in-view"
 const STAGES = [
   {
     stage: "01",
-    state: "ATTENTION",
-    line: "They arrive and something makes them stop.",
-    detail:
-      "Real-time 3D and motion that loads fast enough to actually be seen, not a hero video that buffers.",
+    state: "Attention",
+    line: "Make them stop.",
+    detail: "A first impression strong enough to interrupt the scroll — without hiding behind a pre-rendered hero video.",
   },
   {
     stage: "02",
-    state: "COMPREHENSION",
-    line: "Thirty seconds in, they understand what you sell.",
-    detail:
-      "Interactive explanation instead of three paragraphs nobody finishes. Complexity made visual.",
+    state: "Clarity",
+    line: "Make it obvious.",
+    detail: "Turn complex products, technology and ideas into experiences people can understand in seconds.",
   },
   {
     stage: "03",
-    state: "TRUST",
-    line: "It feels built by people who know what they are doing.",
-    detail:
-      "Because it is. Performance, accessibility and structure are visible in how the thing behaves.",
+    state: "Trust",
+    line: "Make it credible.",
+    detail: "The work should feel ambitious and still behave like production software: fast, accessible and structurally sound.",
   },
   {
     stage: "04",
-    state: "ENQUIRY",
-    line: "They contact you without being chased.",
-    detail:
-      "One route through the page, one action at the end of it. No popups, no exit-intent traps.",
+    state: "Action",
+    line: "Make it convert.",
+    detail: "One clear journey from curiosity to proof to enquiry. No tricks, no noise, no friction disguised as creativity.",
   },
 ]
 
 export default function SystemOutcomes() {
   const section = useRef<HTMLElement>(null)
-  const inView = useInView(section, { amount: 0.2 })
+  const inView = useInView(section, { amount: 0.15 })
 
   return (
     <section
       id="sys-outcomes"
       ref={section}
-      className="relative flex min-h-screen items-center px-6 py-28 sm:px-10 lg:px-14 xl:px-20"
+      className="relative border-b border-[var(--line)] px-5 py-28 sm:px-8 lg:px-12 lg:py-40 xl:px-16"
     >
-      <div className="mx-auto grid w-full max-w-[1700px] gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <div className="readable lg:sticky lg:top-32 lg:self-start">
-          <span className="mono text-[10px] uppercase tracking-[0.28em] text-[var(--signal)]">
-            Process / funnel
-          </span>
-          <h2 className="mt-6 max-w-[13ch] text-[clamp(2.2rem,4.4vw,4rem)] font-semibold leading-[0.98] tracking-[-0.035em]">
-            Traffic is not the problem.
+      <div className="mx-auto w-full max-w-[1800px]">
+        <div className="grid gap-12 border-b border-[var(--line)] pb-16 lg:grid-cols-[0.48fr_1.52fr] lg:items-end lg:pb-24">
+          <div>
+            <span className="mono text-[9px] uppercase tracking-[0.22em] text-[var(--signal)]">What MORPH actually sells</span>
+            <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.15em] opacity-35">
+              Not effects. Not templates. Not technology for its own sake.
+            </p>
+          </div>
+
+          <h2 className="max-w-[13ch] text-[clamp(3.4rem,8vw,9rem)] font-black uppercase leading-[0.8] tracking-[-0.065em]">
+            Attention is cheap.
+            <span className="block text-[var(--signal)]">Impact is engineered.</span>
           </h2>
-          <p className="mt-7 max-w-md text-lg leading-8 opacity-55">
-            Getting people to the page is the easy half. This is the part most
-            sites drop, stage by stage.
-          </p>
         </div>
 
-        <ol className="space-y-3">
-          {STAGES.map((item, i) => (
+        <ol>
+          {STAGES.map((item, index) => (
             <motion.li
               key={item.stage}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={inView ? { opacity: 1, y: 0 } : undefined}
-              transition={{
-                duration: 0.6,
-                delay: i * 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="panel group relative overflow-hidden p-6 lg:p-7"
-              // Each stage is narrower than the last, mirroring the funnel
-              style={{ marginRight: `${i * 3}%` }}
+              transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="group grid gap-6 border-b border-[var(--line)] py-8 sm:grid-cols-[64px_160px_1fr] lg:grid-cols-[90px_220px_1fr] lg:items-start lg:py-11"
             >
-              <div className="flex items-baseline gap-4">
-                <span className="mono text-[11px] text-[var(--signal)]">
-                  {item.stage}
-                </span>
-                <span className="mono text-[10px] uppercase tracking-[0.24em] opacity-35">
-                  {item.state}
-                </span>
-                <span className="ml-auto h-px flex-1 bg-[var(--line)]" />
+              <span className="mono text-[10px] text-[var(--signal)]">{item.stage}</span>
+              <span className="mono text-[9px] uppercase tracking-[0.2em] opacity-35 transition-opacity group-hover:opacity-70 sm:pt-1">{item.state}</span>
+              <div className="grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:gap-12">
+                <h3 className="text-[clamp(1.8rem,3.5vw,4.25rem)] font-semibold leading-[0.95] tracking-[-0.05em]">{item.line}</h3>
+                <p className="max-w-xl text-base leading-7 opacity-48 lg:pt-1 lg:text-lg lg:leading-8">{item.detail}</p>
               </div>
-
-              <p className="mt-5 text-xl leading-[1.35] tracking-[-0.015em] md:text-2xl">
-                {item.line}
-              </p>
-              <p className="mt-3 max-w-lg leading-7 opacity-45">
-                {item.detail}
-              </p>
             </motion.li>
           ))}
         </ol>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useRef } from "react"
-import { useFrame } from "@react-three/fiber"
+import { useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
 import { buildFormations } from "@/lib/formations"
 
@@ -18,20 +18,16 @@ const VERTEX = /* glsl */ `
   varying float vFade;
 
   void main() {
-    // Per-instance stagger turns the swap into a travelling wave rather than
-    // every module moving in lockstep.
     float lead = aSeed * 0.35;
     float m = clamp((uMix - lead) / 0.65, 0.0, 1.0);
     m = m * m * (3.0 - 2.0 * m);
 
     vec3 base = mix(aFrom, aTo, m);
 
-    // Modules never sit perfectly still; the machine idles.
     float drift = sin(uTime * 0.7 + aSeed * 6.2831) * 0.035;
     base.y += drift;
     base.x += cos(uTime * 0.5 + aSeed * 4.1) * 0.025;
 
-    // In-flight modules swell slightly, so movement reads as energy
     float travel = sin(m * 3.14159);
     float scale = aScale * (1.0 + travel * 0.55);
 
@@ -53,8 +49,6 @@ const FRAGMENT = /* glsl */ `
   varying float vFade;
 
   void main() {
-    // A minority of modules carry the signal colour, so it reads as status
-    // rather than decoration.
     float hot = smoothstep(0.82, 1.0, vSeed);
     vec3 color = mix(uInk, uSignal, hot);
     gl_FragColor = vec4(color, vFade * (0.26 + hot * 0.6));
@@ -62,7 +56,6 @@ const FRAGMENT = /* glsl */ `
 `
 
 type Props = {
-  /** Index into the formation list; changing it triggers the morph. */
   formation: number
   count: number
   motion: boolean
@@ -72,6 +65,7 @@ export default function SystemCore({ formation, count, motion }: Props) {
   const mesh = useRef<THREE.Mesh>(null)
   const material = useRef<THREE.ShaderMaterial>(null)
   const mixTarget = useRef(1)
+  const invalidate = useThree((state) => state.invalidate)
 
   const formations = useMemo(() => buildFormations(count), [count])
 
@@ -103,7 +97,6 @@ export default function SystemCore({ formation, count, motion }: Props) {
     return geo
   }, [count, formations])
 
-  // Swap targets whenever the active formation changes.
   useEffect(() => {
     const geo = geometry
     const from = geo.getAttribute("aFrom") as THREE.InstancedBufferAttribute
@@ -112,7 +105,6 @@ export default function SystemCore({ formation, count, motion }: Props) {
     const mat = material.current
     if (!mat) return
 
-    // Freeze wherever the current morph got to, then aim at the new shape.
     const held = mat.uniforms.uMix.value as number
     const fromArr = from.array as Float32Array
     const toArr = to.array as Float32Array
@@ -125,7 +117,21 @@ export default function SystemCore({ formation, count, motion }: Props) {
 
     mat.uniforms.uMix.value = 0
     mixTarget.current = 1
-  }, [formation, formations, geometry])
+
+    if (!motion) {
+      mat.uniforms.uMix.value = 1
+      invalidate()
+    }
+  }, [formation, formations, geometry, invalidate, motion])
+
+  useEffect(() => {
+    if (motion) return
+    const mat = material.current
+    if (!mat) return
+    mat.uniforms.uMix.value = 1
+    mixTarget.current = 1
+    invalidate()
+  }, [invalidate, motion])
 
   useEffect(() => () => geometry.dispose(), [geometry])
 
@@ -133,11 +139,17 @@ export default function SystemCore({ formation, count, motion }: Props) {
     const mat = material.current
     if (!mat) return
 
-    const step = motion ? Math.min(delta, 0.05) : 1
-    mat.uniforms.uMix.value += (mixTarget.current - mat.uniforms.uMix.value) * step * 1.9
-    if (motion) mat.uniforms.uTime.value = state.clock.getElapsedTime()
+    if (!motion) {
+      if (mat.uniforms.uMix.value !== 1) mat.uniforms.uMix.value = 1
+      return
+    }
 
-    if (!mesh.current || !motion) return
+    const step = Math.min(delta, 0.05)
+    mat.uniforms.uMix.value +=
+      (mixTarget.current - mat.uniforms.uMix.value) * step * 1.9
+    mat.uniforms.uTime.value = state.clock.getElapsedTime()
+
+    if (!mesh.current) return
     mesh.current.rotation.y += delta * 0.055
     mesh.current.rotation.x =
       Math.sin(state.clock.getElapsedTime() * 0.18) * 0.08 - state.pointer.y * 0.12

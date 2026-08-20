@@ -8,13 +8,14 @@
 }
 
 :root {
-  --ground: #08090b;
-  --ink: #e9edf2;
-  --signal: #c6f24e;
-  --data: #7fb2ff;
+  --ground: #050607;
+  --ink: #f1f2ed;
+  --signal: #d7ff19;
+  --data: #96b8ff;
+  --muted: #8b8e86;
 
-  --line: rgba(233, 237, 242, 0.09);
-  --line-strong: rgba(233, 237, 242, 0.18);
+  --line: rgba(241, 242, 237, 0.1);
+  --line-strong: rgba(241, 242, 237, 0.22);
 
   --background: var(--ground);
   --foreground: var(--ink);
@@ -33,15 +34,21 @@
     background: var(--ground);
     color: var(--ink);
     overflow-x: hidden;
+    text-rendering: geometricPrecision;
   }
 
   canvas {
     display: block;
   }
 
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
   ::selection {
     background: var(--signal);
-    color: #0a0b0d;
+    color: #050607;
   }
 }
 
@@ -51,16 +58,13 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Instrument panel: readable over the live scene without hiding it */
   .panel {
-    background: rgba(12, 14, 17, 0.72);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(7, 8, 9, 0.62);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--line);
   }
 
-  /* Text sitting over the live scene gets its own pool of darkness, so the
-     swarm never costs us legibility. */
   .readable {
     position: relative;
     isolation: isolate;
@@ -69,35 +73,22 @@
   .readable::before {
     content: "";
     position: absolute;
-    inset: -1.75rem -1.25rem;
+    inset: -2rem;
     z-index: -1;
     pointer-events: none;
-    /* Mobile text runs full width, so the pool is centred and heavier */
     background: radial-gradient(
-      ellipse 105% 72% at 50% 50%,
-      rgba(8, 9, 11, 0.96) 0%,
-      rgba(8, 9, 11, 0.9) 55%,
-      rgba(8, 9, 11, 0) 88%
+      ellipse 80% 75% at 25% 50%,
+      rgba(5, 6, 7, 0.94) 0%,
+      rgba(5, 6, 7, 0.74) 48%,
+      rgba(5, 6, 7, 0) 82%
     );
-  }
-
-  @media (min-width: 1024px) {
-    .readable::before {
-      inset: -2.5rem -4rem;
-      background: radial-gradient(
-        ellipse 75% 65% at 28% 50%,
-        rgba(8, 9, 11, 0.94) 0%,
-        rgba(8, 9, 11, 0.8) 45%,
-        rgba(8, 9, 11, 0) 78%
-      );
-    }
   }
 
   .hairline {
     background-image:
       linear-gradient(var(--line) 1px, transparent 1px),
       linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 72px 72px;
+    background-size: 96px 96px;
   }
 
   .pulse-dot {
@@ -105,44 +96,44 @@
     height: 6px;
     border-radius: 9999px;
     background: var(--signal);
-    animation: pulse 1.6s ease-in-out infinite;
+    box-shadow: 0 0 18px rgba(215, 255, 25, 0.45);
+    animation: pulse 1.8s ease-in-out infinite;
   }
 
   .caret {
     animation: blink 1s step-end infinite;
   }
 
-  /* One CTA carries the whole page, so it gets real presence */
   .cta {
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 2rem;
+    justify-content: center;
+    gap: 0.85rem;
+    min-height: 3rem;
+    padding: 0.95rem 1.35rem;
     background: var(--signal);
-    color: #0a0b0d;
-    font-weight: 600;
-    font-size: 0.95rem;
+    color: #050607;
+    font-family: var(--font-plex-mono), ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 0.66rem;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     overflow: hidden;
-    transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 240ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 240ms cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cta:hover {
     transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(215, 255, 25, 0.12);
   }
 
-  .cta::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      100deg,
-      transparent 20%,
-      rgba(255, 255, 255, 0.55) 50%,
-      transparent 80%
-    );
-    transform: translateX(-100%);
-    animation: sweep 3.4s ease-in-out infinite;
+  .cta:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 4px;
   }
 }
 
@@ -150,25 +141,17 @@
   0%,
   100% {
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.25;
+    opacity: 0.35;
+    transform: scale(0.72);
   }
 }
 
 @keyframes blink {
   50% {
     opacity: 0;
-  }
-}
-
-@keyframes sweep {
-  0%,
-  55% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
   }
 }
 
@@ -183,9 +166,5 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
-  }
-
-  .cta::after {
-    display: none;
   }
 }

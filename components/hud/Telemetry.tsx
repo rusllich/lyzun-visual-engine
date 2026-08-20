@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 import { telemetry, readDevice, readTimings, type DeviceInfo } from "@/lib/telemetry"
 
-/** Real FPS history, drawn to canvas. No sample is fabricated. */
 function Sparkline() {
   const canvas = useRef<HTMLCanvasElement>(null)
 
@@ -14,7 +13,14 @@ function Sparkline() {
     if (!ctx) return
 
     let raf = 0
+    let intersecting = typeof IntersectionObserver === "undefined"
+
     const draw = () => {
+      if (!intersecting || document.visibilityState !== "visible") {
+        raf = 0
+        return
+      }
+
       const dpr = Math.min(window.devicePixelRatio, 2)
       const w = el.clientWidth
       const h = el.clientHeight
@@ -31,7 +37,7 @@ function Sparkline() {
       ctx.beginPath()
       data.forEach((value, i) => {
         const x = (i / (data.length - 1)) * w
-        const y = h - Math.min(value, max) / max * h
+        const y = h - (Math.min(value, max) / max) * h
         if (i === 0) ctx.moveTo(x, y)
         else ctx.lineTo(x, y)
       })
@@ -39,7 +45,6 @@ function Sparkline() {
       ctx.lineWidth = 1
       ctx.stroke()
 
-      // 60fps reference
       ctx.beginPath()
       const ref = h - (60 / max) * h
       ctx.moveTo(0, ref)
@@ -50,8 +55,32 @@ function Sparkline() {
       raf = requestAnimationFrame(draw)
     }
 
-    raf = requestAnimationFrame(draw)
-    return () => cancelAnimationFrame(raf)
+    const sync = () => {
+      const shouldRun = intersecting && document.visibilityState === "visible"
+      if (shouldRun && raf === 0) raf = requestAnimationFrame(draw)
+      if (!shouldRun && raf !== 0) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+    }
+
+    const observer =
+      typeof IntersectionObserver === "undefined"
+        ? null
+        : new IntersectionObserver(([entry]) => {
+            intersecting = entry.isIntersecting
+            sync()
+          })
+
+    observer?.observe(el)
+    document.addEventListener("visibilitychange", sync)
+    sync()
+
+    return () => {
+      observer?.disconnect()
+      document.removeEventListener("visibilitychange", sync)
+      if (raf !== 0) cancelAnimationFrame(raf)
+    }
   }, [])
 
   return <canvas ref={canvas} className="h-10 w-full" aria-hidden="true" />
@@ -71,23 +100,28 @@ function Row({ label, value }: { label: string; value: string }) {
 export default function Telemetry() {
   const [device, setDevice] = useState<DeviceInfo | null>(null)
   const [timings, setTimings] = useState<ReturnType<typeof readTimings>>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
   const fpsRef = useRef<HTMLSpanElement>(null)
   const msRef = useRef<HTMLSpanElement>(null)
   const callsRef = useRef<HTMLSpanElement>(null)
   const trisRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
-    // Deferred: readDevice() spins up a throwaway WebGL context, and the
-    // navigation timings are not final until after load settles.
     const settle = window.setTimeout(() => {
       setDevice(readDevice())
       setTimings(readTimings())
     }, 700)
 
-    // Written straight to the DOM — running this through React state would
-    // re-render the tree twice a second for nothing.
+    const panel = panelRef.current
     let raf = 0
+    let intersecting = typeof IntersectionObserver === "undefined"
+
     const tick = () => {
+      if (!intersecting || document.visibilityState !== "visible") {
+        raf = 0
+        return
+      }
+
       if (fpsRef.current)
         fpsRef.current.textContent = telemetry.fps.toFixed(0).padStart(2, "0")
       if (msRef.current)
@@ -98,16 +132,38 @@ export default function Telemetry() {
         trisRef.current.textContent = telemetry.triangles.toLocaleString("en-US")
       raf = requestAnimationFrame(tick)
     }
-    raf = requestAnimationFrame(tick)
+
+    const sync = () => {
+      const shouldRun = intersecting && document.visibilityState === "visible"
+      if (shouldRun && raf === 0) raf = requestAnimationFrame(tick)
+      if (!shouldRun && raf !== 0) {
+        cancelAnimationFrame(raf)
+        raf = 0
+      }
+    }
+
+    const observer =
+      panel && typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(([entry]) => {
+            intersecting = entry.isIntersecting
+            sync()
+          })
+        : null
+
+    if (panel) observer?.observe(panel)
+    document.addEventListener("visibilitychange", sync)
+    sync()
 
     return () => {
-      cancelAnimationFrame(raf)
+      observer?.disconnect()
+      document.removeEventListener("visibilitychange", sync)
+      if (raf !== 0) cancelAnimationFrame(raf)
       window.clearTimeout(settle)
     }
   }, [])
 
   return (
-    <div className="panel p-4">
+    <div ref={panelRef} className="panel p-4">
       <div className="mb-3 flex items-center justify-between">
         <span className="mono text-[10px] uppercase tracking-[0.2em] opacity-40">
           Live telemetry
