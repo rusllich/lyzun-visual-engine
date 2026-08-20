@@ -13,27 +13,50 @@ export default function SmoothScroll({
   children: React.ReactNode
 }) {
   useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
-    })
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    let cleanupLenis: (() => void) | null = null
 
-    lenis.on("scroll", ScrollTrigger.update)
+    const sync = () => {
+      cleanupLenis?.()
+      cleanupLenis = null
 
-    const update = (time: number) => {
-      lenis.raf(time * 1000)
+      if (reducedMotionQuery.matches) {
+        ScrollTrigger.refresh()
+        return
+      }
+
+      const lenis = new Lenis({
+        lerp: 0.08,
+        smoothWheel: true,
+      })
+
+      lenis.on("scroll", ScrollTrigger.update)
+
+      const update = (time: number) => {
+        lenis.raf(time * 1000)
+      }
+
+      gsap.ticker.add(update)
+      gsap.ticker.lagSmoothing(0)
+
+      cleanupLenis = () => {
+        gsap.ticker.remove(update)
+        lenis.destroy()
+      }
+
+      ScrollTrigger.refresh()
     }
 
-    gsap.ticker.add(update)
-    gsap.ticker.lagSmoothing(0)
-
     const onLoad = () => ScrollTrigger.refresh()
+
+    sync()
     window.addEventListener("load", onLoad)
+    reducedMotionQuery.addEventListener("change", sync)
 
     return () => {
-      gsap.ticker.remove(update)
-      lenis.destroy()
+      cleanupLenis?.()
       window.removeEventListener("load", onLoad)
+      reducedMotionQuery.removeEventListener("change", sync)
     }
   }, [])
 
