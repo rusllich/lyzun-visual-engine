@@ -92,6 +92,7 @@ export async function POST(request: Request) {
         },
         customer: client ? { number: client.id, email: client.email || undefined, firstName: client.display_name, companyName: client.company_name || undefined } : undefined,
       })
+      if (!session.transactionId) throw new Error("Payoneer LIST response did not include a transaction id")
 
       await morphServerPatch("morph_payments", accessToken, { id: paymentId }, { provider_payment_id: session.transactionId, provider_checkout_url: session.redirectUrl, provider_payment_status: "listed", status: "waiting", updated_at: now })
       await morphServerPatch("morph_projects", accessToken, { id: project.id }, { payment_state: input.kind === "deposit" ? "awaiting_deposit" : "awaiting_balance", updated_at: now })
