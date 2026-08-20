@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo } from "react"
+import { useEffect, useState } from "react"
 import LiveScene from "@/components/three/LiveScene"
 import { FORMATIONS } from "@/lib/formations"
 import { useActiveSection } from "@/lib/use-active-section"
@@ -15,18 +15,54 @@ const SECTION_IDS = [
   "sys-start",
 ]
 
+type Quality = {
+  count: number
+  dpr: [number, number]
+}
+
+const DEFAULT_QUALITY: Quality = { count: 3200, dpr: [1, 1.35] }
+
+function readQuality(): Quality {
+  const cores = navigator.hardwareConcurrency ?? 8
+  const width = window.innerWidth
+  const coarse = window.matchMedia("(pointer: coarse)").matches
+
+  if (coarse || width < 640 || cores <= 4) return { count: 1400, dpr: [1, 1] }
+  if (width < 1280 || cores <= 7) return { count: 3000, dpr: [1, 1.25] }
+  return { count: 5600, dpr: [1, 1.5] }
+}
+
+function sameQuality(a: Quality, b: Quality) {
+  return a.count === b.count && a.dpr[0] === b.dpr[0] && a.dpr[1] === b.dpr[1]
+}
+
 function useQuality() {
-  return useMemo(() => {
-    if (typeof window === "undefined") return { count: 3200, dpr: [1, 1.35] as [number, number] }
+  const [quality, setQuality] = useState<Quality>(DEFAULT_QUALITY)
 
-    const cores = navigator.hardwareConcurrency ?? 8
-    const width = window.innerWidth
-    const coarse = window.matchMedia("(pointer: coarse)").matches
+  useEffect(() => {
+    const coarseQuery = window.matchMedia("(pointer: coarse)")
+    let frame = 0
 
-    if (coarse || width < 640 || cores <= 4) return { count: 1400, dpr: [1, 1] as [number, number] }
-    if (width < 1280 || cores <= 7) return { count: 3000, dpr: [1, 1.25] as [number, number] }
-    return { count: 5600, dpr: [1, 1.5] as [number, number] }
+    const sync = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const next = readQuality()
+        setQuality((current) => (sameQuality(current, next) ? current : next))
+      })
+    }
+
+    sync()
+    window.addEventListener("resize", sync, { passive: true })
+    coarseQuery.addEventListener("change", sync)
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener("resize", sync)
+      coarseQuery.removeEventListener("change", sync)
+    }
   }, [])
+
+  return quality
 }
 
 export default function LiveSystemShell({
