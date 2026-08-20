@@ -7,6 +7,7 @@ import { morphServiceInsert, morphServicePatch, morphServiceSelectOne } from "@/
 type Payment = {
   id: string
   project_id: string
+  provider_payment_id: string | null
   kind: "deposit" | "balance"
   amount_cents: number
   currency: string
@@ -39,18 +40,27 @@ export async function POST(request: Request) {
     }
 
     const paymentId = payload.order_id?.trim()
+    const providerPaymentId = payload.payment_id ? String(payload.payment_id).trim() : ""
     const providerStatus = payload.payment_status?.trim().toLowerCase()
-    if (!paymentId || !providerStatus) return NextResponse.json({ error: "Invalid payment event" }, { status: 400 })
+    if (!paymentId || !providerPaymentId || !providerStatus) {
+      return NextResponse.json({ error: "Invalid payment event" }, { status: 400 })
+    }
 
-    const payment = await morphServiceSelectOne<Payment>("morph_payments", { id: paymentId }, "id,project_id,kind,amount_cents,currency")
+    const payment = await morphServiceSelectOne<Payment>(
+      "morph_payments",
+      { id: paymentId },
+      "id,project_id,provider_payment_id,kind,amount_cents,currency",
+    )
     if (!payment) return NextResponse.json({ error: "Payment not found" }, { status: 404 })
+    if (!payment.provider_payment_id || payment.provider_payment_id !== providerPaymentId) {
+      return NextResponse.json({ error: "Provider payment mismatch" }, { status: 409 })
+    }
 
     const status = internalStatus(providerStatus)
     const paid = isVerifiedPaidStatus(status)
     const now = new Date().toISOString()
 
     await morphServicePatch("morph_payments", { id: payment.id }, {
-      provider_payment_id: payload.payment_id ? String(payload.payment_id) : null,
       provider_payment_status: providerStatus,
       status,
       verified_at: paid ? now : null,
@@ -60,7 +70,7 @@ export async function POST(request: Request) {
     await morphServiceInsert("morph_payment_events", {
       event_id: `evt_${randomUUID()}`,
       provider: "nowpayments",
-      provider_payment_id: payload.payment_id ? String(payload.payment_id) : payment.id,
+      provider_payment_id: providerPaymentId,
       payment_id: payment.id,
       project_id: payment.project_id,
       kind: payment.kind,
