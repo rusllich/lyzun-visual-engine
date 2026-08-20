@@ -1,13 +1,5 @@
 import { Bot, CircleDollarSign, MessageSquareText, ShieldCheck, Sparkles } from "lucide-react"
-
-const metrics = [
-  { label: "Active projects", value: "06", note: "Production + review" },
-  { label: "Planned", value: "04", note: "Deposit paid / scheduled" },
-  { label: "In discussion", value: "07", note: "Discovery + proposal" },
-  { label: "Completed", value: "18", note: "Delivered archive" },
-  { label: "Clients", value: "24", note: "Active + historical" },
-  { label: "Deposits received", value: "€8.4k", note: "Verified prepayments" },
-]
+import OwnerLiveStats from "@/components/dashboard/OwnerLiveStats"
 
 const stages = [
   { label: "New lead", count: 19 },
@@ -47,15 +39,7 @@ export default function DashboardPage() {
         <a href="/dashboard/projects" className="grid min-h-11 place-items-center rounded-full bg-black px-5 text-xs font-semibold uppercase tracking-[0.13em] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Open projects →</a>
       </header>
 
-      <section className="grid border-b border-black/10 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6" aria-label="Owner metrics">
-        {metrics.map((item, index) => (
-          <article key={item.label} className={`py-6 sm:p-6 ${index > 0 ? "sm:border-l sm:border-black/10" : ""}`}>
-            <p className="text-[9px] uppercase tracking-[0.17em] text-black/35">{item.label}</p>
-            <p className="mt-4 text-3xl font-semibold tracking-[-0.055em] sm:text-4xl">{item.value}</p>
-            <p className="mt-2 text-[11px] text-black/40">{item.note}</p>
-          </article>
-        ))}
-      </section>
+      <OwnerLiveStats />
 
       <div className="grid gap-7 py-7 xl:grid-cols-[1.45fr_0.55fr]">
         <section>
@@ -75,9 +59,9 @@ export default function DashboardPage() {
         </section>
 
         <section className="rounded-2xl border border-black/10 bg-[#11120f] p-6 text-white">
-          <div className="flex items-center justify-between"><div><p className="text-[10px] uppercase tracking-[0.2em] text-white/35">Finance snapshot</p><h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">€28,450 received</h2></div><CircleDollarSign size={20} className="text-[#8d83ff]" aria-hidden="true" /></div>
-          <div className="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10"><div className="bg-[#11120f] p-4"><p className="text-[9px] uppercase tracking-[0.15em] text-white/35">Deposits</p><p className="mt-2 text-xl font-semibold">€8.4k</p></div><div className="bg-[#11120f] p-4"><p className="text-[9px] uppercase tracking-[0.15em] text-white/35">Outstanding</p><p className="mt-2 text-xl font-semibold">€57.8k</p></div></div>
-          <p className="mt-7 text-sm leading-6 text-white/65">4 opportunities are waiting for deposit. 2 delivered projects are waiting for final balance.</p>
+          <div className="flex items-center justify-between"><div><p className="text-[10px] uppercase tracking-[0.2em] text-white/35">Finance snapshot</p><h2 className="mt-2 text-2xl font-semibold tracking-[-0.04em]">Live totals above</h2></div><CircleDollarSign size={20} className="text-[#8d83ff]" aria-hidden="true" /></div>
+          <div className="mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-white/10"><div className="bg-[#11120f] p-4"><p className="text-[9px] uppercase tracking-[0.15em] text-white/35">Gate</p><p className="mt-2 text-xl font-semibold">Deposit</p></div><div className="bg-[#11120f] p-4"><p className="text-[9px] uppercase tracking-[0.15em] text-white/35">Handoff</p><p className="mt-2 text-xl font-semibold">Paid in full</p></div></div>
+          <p className="mt-7 text-sm leading-6 text-white/65">Production starts only after the agreed deposit is verified. Final ownership handoff stays locked until the balance is confirmed.</p>
           <a href="/dashboard/finance" className="mt-6 inline-flex text-xs font-semibold text-[#a9a1ff]">Open finance →</a>
         </section>
       </div>
