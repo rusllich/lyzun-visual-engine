@@ -41,3 +41,16 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Package source for Netlify handoff
+        uses: actions/upload-artifact@v4
+        with:
+          name: morph-netlify-source
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+          path: |
+            .
+            !.git/**
+            !node_modules/**
+            !.next/**
