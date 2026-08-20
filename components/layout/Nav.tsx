@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const LINKS = [
   { href: "#sys-work", label: "Work" },
@@ -12,6 +12,8 @@ const LINKS = [
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const firstMenuLinkRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -20,9 +22,25 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
+  useEffect(() => {
+    if (!open) return
+
+    firstMenuLinkRef.current?.focus()
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+      setOpen(false)
+      menuButtonRef.current?.focus()
+    }
+
+    document.addEventListener("keydown", onKeyDown)
+    return () => document.removeEventListener("keydown", onKeyDown)
+  }, [open])
+
   const go = (href: string) => {
     setOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" })
+    document.querySelector(href)?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    })
   }
 
   return (
@@ -33,14 +51,14 @@ export default function Nav() {
           : "border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-[1800px] items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-12 xl:px-16">
+      <nav aria-label="Primary navigation" className="mx-auto flex max-w-[1800px] items-center justify-between gap-6 px-5 py-5 sm:px-8 lg:px-12 xl:px-16">
         <a
           href="#sys-hero"
           onClick={(e) => {
             e.preventDefault()
             go("#sys-hero")
           }}
-          className="text-[15px] font-black tracking-[0.42em]"
+          className="text-[15px] font-black tracking-[0.42em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)]"
         >
           MORPH
         </a>
@@ -54,7 +72,7 @@ export default function Nav() {
                 e.preventDefault()
                 go(link.href)
               }}
-              className="mono text-[9px] uppercase tracking-[0.2em] opacity-45 transition-opacity hover:opacity-100"
+              className="mono text-[9px] uppercase tracking-[0.2em] opacity-45 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)]"
             >
               {link.label}
             </a>
@@ -68,45 +86,48 @@ export default function Nav() {
               e.preventDefault()
               go("#sys-start")
             }}
-            className="mono hidden items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.18em] sm:flex"
+            className="mono hidden items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.18em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)] sm:flex"
           >
             <span>Start something</span>
-            <span className="h-2 w-2 rounded-full bg-[var(--signal)] shadow-[0_0_18px_var(--signal)]" />
+            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--signal)] shadow-[0_0_18px_var(--signal)]" />
           </a>
 
           <button
+            ref={menuButtonRef}
             type="button"
             aria-label={open ? "Close navigation" : "Open navigation"}
             aria-expanded={open}
+            aria-controls="mobile-navigation"
             onClick={() => setOpen((value) => !value)}
-            className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] lg:hidden"
+            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--signal)] lg:hidden"
           >
-            <span className={`h-px w-5 bg-current transition-transform ${open ? "translate-y-[3px] rotate-45" : ""}`} />
-            <span className={`h-px w-5 bg-current transition-transform ${open ? "-translate-y-[3px] -rotate-45" : ""}`} />
+            <span aria-hidden="true" className={`h-px w-5 bg-current transition-transform ${open ? "translate-y-[3px] rotate-45" : ""}`} />
+            <span aria-hidden="true" className={`h-px w-5 bg-current transition-transform ${open ? "-translate-y-[3px] -rotate-45" : ""}`} />
           </button>
         </div>
       </nav>
 
       {open && (
-        <div className="border-t border-[var(--line)] bg-[rgba(5,6,7,0.96)] backdrop-blur-xl lg:hidden">
+        <div id="mobile-navigation" className="border-t border-[var(--line)] bg-[rgba(5,6,7,0.96)] backdrop-blur-xl lg:hidden">
           <div className="px-5 py-5 sm:px-8">
             {LINKS.map((link, index) => (
               <a
+                ref={index === 0 ? firstMenuLinkRef : undefined}
                 key={link.href}
                 href={link.href}
                 onClick={(e) => {
                   e.preventDefault()
                   go(link.href)
                 }}
-                className="flex items-baseline gap-4 border-b border-[var(--line)] py-4"
+                className="flex min-h-12 items-baseline gap-4 border-b border-[var(--line)] py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--signal)]"
               >
-                <span className="mono text-[9px] text-[var(--signal)]">0{index + 1}</span>
+                <span aria-hidden="true" className="mono text-[9px] text-[var(--signal)]">0{index + 1}</span>
                 <span className="text-xl font-semibold tracking-[-0.03em]">{link.label}</span>
               </a>
             ))}
             <a href="#sys-start" onClick={(e) => { e.preventDefault(); go("#sys-start") }} className="cta mt-5 w-full justify-between">
               Bring us something difficult
-              <span>↗</span>
+              <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
