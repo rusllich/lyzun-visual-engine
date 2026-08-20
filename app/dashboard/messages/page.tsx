@@ -1,15 +1,20 @@
-import SectionPage from "@/components/dashboard/SectionPage"
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import { morphSupabaseQuery } from "@/lib/morph/supabase-public"
+
+const TOKEN_KEY = "morph_owner_access"
+type Conversation = { id: string; project_id: string | null; direction: string; channel: string; actor_type: string; subject: string | null; summary: string | null; requires_action: boolean; action_owner: string | null; occurred_at: string }
 
 export default function MessagesPage() {
-  return <SectionPage eyebrow="Messages" title="Client communication without losing context." description="Every conversation stays attached to the right client and project, with clear visibility into what needs a reply and what is waiting on approval." action="New message +" stats={[
-    { label: "Unread", value: "07", note: "Across active projects" },
-    { label: "Needs reply", value: "04", note: "2 due today" },
-    { label: "Awaiting client", value: "05", note: "Content or approval" },
-    { label: "Internal notes", value: "12", note: "This week" },
-  ]} rows={[
-    { title: "Linea Dental", meta: "Client · Treatment flow feedback", status: "Needs reply", detail: "34 min ago" },
-    { title: "Aster House", meta: "Client · New photography uploaded", status: "Received", detail: "1h ago" },
-    { title: "Northline Build", meta: "Internal · QA handoff notes", status: "Internal", detail: "2h ago" },
-    { title: "Form / Function", meta: "Client · Discovery questions", status: "Awaiting client", detail: "Yesterday" },
-  ]} />
+  const [rows,setRows]=useState<Conversation[]>([])
+  const [loading,setLoading]=useState(true)
+  const [error,setError]=useState("")
+  useEffect(()=>{const token=sessionStorage.getItem(TOKEN_KEY);if(!token){queueMicrotask(()=>setLoading(false));return}morphSupabaseQuery<Conversation>("morph_conversations",token,{select:"id,project_id,direction,channel,actor_type,subject,summary,requires_action,action_owner,occurred_at",order:"occurred_at.desc",limit:100}).then(setRows).catch(()=>setError("Live communication data is unavailable.")).finally(()=>setLoading(false))},[])
+  const needsAction=useMemo(()=>rows.filter(r=>r.requires_action).length,[rows])
+  return <>
+    <header className="border-b border-black/10 pb-8"><p className="text-[10px] uppercase tracking-[0.2em] text-black/35">Messages</p><h1 className="mt-3 text-[clamp(2.5rem,5vw,5.5rem)] font-semibold leading-[0.9] tracking-[-0.065em]">Client communication.<br />No lost context.</h1><p className="mt-5 max-w-2xl text-sm leading-6 text-black/45">Live conversation records attached to projects and actions. AI and human communication share the same audit trail.</p></header>
+    <section className="grid border-b border-black/10 sm:grid-cols-2"><article className="py-6 sm:p-6"><p className="text-[9px] uppercase tracking-[0.16em] text-black/35">Conversation records</p><p className="mt-4 text-4xl font-semibold tracking-[-0.055em]">{loading?"—":String(rows.length).padStart(2,"0")}</p><p className="mt-2 text-xs text-black/40">Latest 100 records</p></article><article className="py-6 sm:border-l sm:border-black/10 sm:p-6"><p className="text-[9px] uppercase tracking-[0.16em] text-black/35">Needs action</p><p className="mt-4 text-4xl font-semibold tracking-[-0.055em]">{loading?"—":String(needsAction).padStart(2,"0")}</p><p className="mt-2 text-xs text-black/40">Owner / agent follow-up</p></article></section>
+    <section className="py-7">{error&&<p role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</p>}{!loading&&rows.length===0?<div className="rounded-2xl border border-black/10 bg-white p-8"><p className="text-[10px] uppercase tracking-[0.16em] text-black/35">Live communication</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">No conversation events yet.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-black/45">New inbound or outbound communication will appear here once connected to the MORPH workflow.</p></div>:<div className="overflow-hidden rounded-2xl border border-black/10 bg-white">{rows.map((row,index)=><article key={row.id} className={`grid gap-4 p-5 lg:grid-cols-[1.15fr_0.65fr_0.8fr] lg:items-center ${index>0?"border-t border-black/10":""}`}><div><div className="flex flex-wrap items-center gap-2"><h2 className="font-semibold tracking-[-0.025em]">{row.subject||"Conversation event"}</h2>{row.requires_action&&<span className="rounded-full bg-[#ecebff] px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-[#5146d8]">Action</span>}</div><p className="mt-2 text-xs leading-5 text-black/50">{row.summary||"No summary stored"}</p></div><div><p className="text-[9px] uppercase tracking-[0.13em] text-black/35">{row.direction} · {row.channel}</p><p className="mt-2 text-xs font-medium">{row.actor_type}</p></div><div className="lg:text-right"><p className="text-xs text-black/45">{new Date(row.occurred_at).toLocaleString()}</p><p className="mt-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-black/40">{row.action_owner||"No action owner"}</p></div></article>)}</div>}</section>
+  </>
 }
