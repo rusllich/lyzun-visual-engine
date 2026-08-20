@@ -1,5 +1,6 @@
 export const MORPH_DEFAULT_DEPOSIT_PERCENT = 10
 
+export type MorphPaymentProvider = "nowpayments" | "payoneer"
 export type MorphPaymentKind = "deposit" | "balance"
 export type MorphPaymentStatus = "pending" | "waiting" | "confirming" | "confirmed" | "finished" | "failed" | "expired" | "refunded"
 
