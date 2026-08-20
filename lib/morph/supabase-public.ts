@@ -26,6 +26,22 @@ export async function morphSupabaseQuery<T>(table: string, accessToken: string, 
   return response.json() as Promise<T[]>
 }
 
+export async function morphSupabaseRpc<T>(functionName: string, accessToken: string, body: Record<string, unknown> = {}): Promise<T> {
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${functionName}`, {
+    method: "POST",
+    headers: {
+      apikey: SUPABASE_PUBLISHABLE_KEY,
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+    cache: "no-store",
+  })
+
+  if (!response.ok) throw new Error(`MORPH RPC failed (${response.status})`)
+  return response.json() as Promise<T>
+}
+
 export async function morphSignIn(email: string, password: string) {
   const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
     method: "POST",
