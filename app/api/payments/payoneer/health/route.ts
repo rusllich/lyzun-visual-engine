@@ -6,6 +6,7 @@ export async function GET() {
     process.env.PAYONEER_PAYMENT_TOKEN?.trim() &&
     process.env.PAYONEER_STORE_CODE?.trim() &&
     process.env.PAYONEER_LIST_ENDPOINT?.trim() &&
+    process.env.PAYONEER_NOTIFICATION_SECRET?.trim() &&
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() &&
     process.env.MORPH_PUBLIC_URL?.trim()
   )

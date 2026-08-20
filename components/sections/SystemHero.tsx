@@ -11,13 +11,13 @@ export default function SystemHero() {
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-[var(--line)] pb-4 lg:mb-10">
           <div className="mono flex items-center gap-3 text-[9px] uppercase tracking-[0.22em] sm:text-[10px]">
             <span className="h-2 w-2 rounded-full bg-[var(--signal)] shadow-[0_0_24px_var(--signal)]" />
-            <span className="opacity-45">Creative engineering / 2026</span>
+            <span className="opacity-45">MORPH / premium digital experiences</span>
           </div>
           <div className="mono flex flex-wrap gap-x-6 gap-y-2 text-[9px] uppercase tracking-[0.2em] opacity-40 sm:text-[10px]">
-            <span>Design</span>
-            <span>Real-time 3D</span>
-            <span>Motion</span>
-            <span>AI systems</span>
+            <span>Hospitality</span>
+            <span>Architecture</span>
+            <span>Construction</span>
+            <span>Dental / aesthetic</span>
           </div>
         </div>
 
@@ -35,16 +35,16 @@ export default function SystemHero() {
           <div className="relative z-10 lg:pb-2">
             <div className="border-l border-[var(--signal)] pl-5 sm:pl-6">
               <p className="max-w-sm text-[clamp(1.05rem,1.5vw,1.35rem)] leading-[1.45] tracking-[-0.02em]">
-                Ambitious digital experiences — designed to stop people and engineered to survive production.
+                Premium websites and digital experiences for businesses where perception changes the sale — built to look valuable, explain value fast and turn attention into enquiries.
               </p>
-              <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.16em] opacity-40">
-                Real-time 3D / custom motion / digital products / AI automation / performance systems
+              <p className="mono mt-5 max-w-sm text-[10px] uppercase leading-5 tracking-[0.16em] opacity-40">
+                Strategy / art direction / conversion UX / motion & 3D / frontend / launch. High-touch projects typically start at $5k.
               </p>
             </div>
 
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <a href="#sys-start" className="cta">
-                Bring us something difficult
+                Request a first-screen direction
                 <span aria-hidden="true">↗</span>
               </a>
               <a

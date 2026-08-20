@@ -3,10 +3,19 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useState } from "react"
 
-const projectTypes = ["Brand website", "SaaS / web app", "E-commerce", "3D / interactive", "AI / automation", "Something difficult"]
-const goals = ["Launch something new", "Look premium", "Explain complexity", "Convert better", "Stand out creatively"]
+const projectTypes = [
+  "Hospitality / destination",
+  "Architecture / interiors",
+  "Construction / remodeling",
+  "Dental / aesthetic",
+  "Premium product / commerce",
+  "3D / interactive",
+  "AI / automation",
+  "Other premium business",
+]
+const goals = ["Increase enquiries / bookings", "Look premium", "Explain value faster", "Convert better", "Stand out creatively"]
 const levels = ["Focused & refined", "Bold & premium", "Fully custom / experimental"]
-const budgets = ["Under $5k", "$5k – $15k", "$15k – $40k", "$40k+"]
+const budgets = ["$5k – $10k", "$10k – $20k", "$20k – $40k", "$40k+"]
 const timelines = ["ASAP", "1–2 months", "3+ months", "Flexible"]
 
 type FormState = {
@@ -104,10 +113,10 @@ export default function SystemStart() {
         <div className="grid gap-10 border-b border-[var(--line)] pb-16 lg:grid-cols-[0.42fr_1.58fr] lg:items-end lg:pb-24">
           <div>
             <span className="mono text-[9px] uppercase tracking-[0.22em] text-[var(--signal)]">Start / project brief</span>
-            <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.15em] opacity-35">Four short steps. Enough context to have a useful first conversation.</p>
+            <p className="mono mt-5 max-w-xs text-[10px] uppercase leading-5 tracking-[0.15em] opacity-35">Four short steps. High-touch builds typically start at $5k. If a current site exists, we can anchor the first reply in a concrete first-screen direction.</p>
           </div>
           <h2 id="project-brief-title" className="max-w-[9.5ch] text-[clamp(3.7rem,9vw,10rem)] font-black uppercase leading-[0.76] tracking-[-0.07em]">
-            Bring us something <span className="text-[var(--signal)]">difficult.</span>
+            Bring us something <span className="text-[var(--signal)]">valuable.</span>
           </h2>
         </div>
 
@@ -116,7 +125,7 @@ export default function SystemStart() {
             <div>
               <span className="mono text-[9px] uppercase tracking-[0.2em] text-[var(--signal)]">Brief received</span>
               <h3 className="mt-6 text-[clamp(2.8rem,7vw,7rem)] font-black uppercase leading-[0.8] tracking-[-0.065em]">We&apos;ll read it properly.</h3>
-              <p className="mx-auto mt-6 max-w-md text-lg leading-8 opacity-45">We&apos;ll reply to {form.email} with a view on scope, timing and the right level of ambition.</p>
+              <p className="mx-auto mt-6 max-w-md text-lg leading-8 opacity-45">We&apos;ll reply to {form.email} with a view on scope, timing and the strongest next move. When useful, that starts with a first-screen direction based on what already exists.</p>
             </div>
           </motion.div>
         ) : (
@@ -135,7 +144,7 @@ export default function SystemStart() {
                       className={`mono flex items-center gap-3 text-[9px] uppercase tracking-[0.17em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--signal)] ${number === step ? "text-[var(--signal)]" : number < step ? "opacity-60 hover:opacity-100" : "opacity-20"}`}
                     >
                       <span>{String(number).padStart(2, "0")}</span>
-                      <span className="hidden lg:inline">{["Project", "Outcome", "Constraints", "Contact"][number - 1]}</span>
+                      <span className="hidden lg:inline">{["Business", "Outcome", "Constraints", "Contact"][number - 1]}</span>
                     </button>
                   ))}
                 </div>
@@ -146,8 +155,8 @@ export default function SystemStart() {
               <AnimatePresence mode="wait">
                 {step === 1 && (
                   <motion.div key="one" initial={enterMotion} animate={{ opacity: 1, y: 0 }} exit={exitMotion}>
-                    <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">01 / What are we making?</p>
-                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Choose the closest shape. We can redefine it later.</h3>
+                    <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">01 / What kind of business is this?</p>
+                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Choose the closest commercial context.</h3>
                     <div className="mt-9 grid gap-3 sm:grid-cols-2">{projectTypes.map((item) => <Choice key={item} label={item} active={form.projectType === item} onClick={() => setForm((current) => ({ ...current, projectType: item }))} />)}</div>
                   </motion.div>
                 )}
@@ -155,9 +164,19 @@ export default function SystemStart() {
                 {step === 2 && (
                   <motion.div key="two" initial={enterMotion} animate={{ opacity: 1, y: 0 }} exit={exitMotion}>
                     <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">02 / What has to change?</p>
-                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Give us the business, then the outcome.</h3>
-                    <label htmlFor="brief-business" className="sr-only">What does the business or product do?</label>
-                    <input id="brief-business" value={form.businessName} onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))} placeholder="What does the business / product do?" autoComplete="organization" className={`${inputClass} mt-9`} />
+                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Give us the business, the current surface and the outcome.</h3>
+                    <label htmlFor="brief-business" className="sr-only">Business or product</label>
+                    <input id="brief-business" value={form.businessName} onChange={(event) => setForm((current) => ({ ...current, businessName: event.target.value }))} placeholder="Business / product name or short description" autoComplete="organization" className={`${inputClass} mt-9`} />
+                    <label htmlFor="brief-website" className="sr-only">Current website URL, optional</label>
+                    <input
+                      id="brief-website"
+                      type="url"
+                      value={form.websiteUrl}
+                      onChange={(event) => setForm((current) => ({ ...current, websiteUrl: event.target.value, hasWebsite: event.target.value.trim() ? "yes" : "" }))}
+                      placeholder="Current website / URL (optional)"
+                      autoComplete="url"
+                      className={`${inputClass} mt-5`}
+                    />
                     <div className="mt-9 grid gap-3 sm:grid-cols-2">{goals.map((item) => <Choice key={item} label={item} active={form.goals.includes(item)} onClick={() => toggleGoal(item)} />)}</div>
                   </motion.div>
                 )}
@@ -168,7 +187,7 @@ export default function SystemStart() {
                     <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">Ambition needs a level, budget and timeline.</h3>
                     <p className="mono mb-3 mt-9 text-[9px] uppercase tracking-[0.17em] opacity-30">Creative level</p>
                     <div className="grid gap-3 sm:grid-cols-3">{levels.map((item) => <Choice key={item} label={item} active={form.level === item} onClick={() => setForm((current) => ({ ...current, level: item }))} />)}</div>
-                    <p className="mono mb-3 mt-7 text-[9px] uppercase tracking-[0.17em] opacity-30">Budget</p>
+                    <p className="mono mb-3 mt-7 text-[9px] uppercase tracking-[0.17em] opacity-30">Project budget</p>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{budgets.map((item) => <Choice key={item} label={item} active={form.budget === item} onClick={() => setForm((current) => ({ ...current, budget: item }))} />)}</div>
                     <p className="mono mb-3 mt-7 text-[9px] uppercase tracking-[0.17em] opacity-30">Timeline</p>
                     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{timelines.map((item) => <Choice key={item} label={item} active={form.timeline === item} onClick={() => setForm((current) => ({ ...current, timeline: item }))} />)}</div>
@@ -178,7 +197,7 @@ export default function SystemStart() {
                 {step === 4 && (
                   <motion.div key="four" initial={enterMotion} animate={{ opacity: 1, y: 0 }} exit={exitMotion}>
                     <p className="mono text-[9px] uppercase tracking-[0.18em] text-[var(--signal)]">04 / Who do we reply to?</p>
-                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">No sales maze. Just a useful reply.</h3>
+                    <h3 className="mt-5 max-w-[13ch] text-[clamp(2.1rem,4vw,4.6rem)] font-semibold leading-[0.94] tracking-[-0.055em]">No sales maze. A useful next move.</h3>
                     <div className="mt-10 grid gap-8 sm:grid-cols-2">
                       <div>
                         <label htmlFor="brief-name" className="sr-only">Your name</label>
@@ -200,7 +219,7 @@ export default function SystemStart() {
                 {step < 4 ? (
                   <button type="button" disabled={!canAdvance} onClick={() => setStep((current) => Math.min(4, current + 1))} className="cta disabled:cursor-not-allowed disabled:opacity-20">Continue ↗</button>
                 ) : (
-                  <button type="button" disabled={!contactValid || status === "submitting"} onClick={submit} className="cta disabled:cursor-not-allowed disabled:opacity-20">{status === "submitting" ? "Sending…" : "Submit brief ↗"}</button>
+                  <button type="button" disabled={!contactValid || status === "submitting"} onClick={submit} className="cta disabled:cursor-not-allowed disabled:opacity-20">{status === "submitting" ? "Sending…" : "Request direction ↗"}</button>
                 )}
               </div>
             </div>
