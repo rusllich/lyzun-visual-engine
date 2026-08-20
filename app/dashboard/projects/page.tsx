@@ -1,16 +1,33 @@
-import SectionPage from "@/components/dashboard/SectionPage"
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import { morphSupabaseQuery } from "@/lib/morph/supabase-public"
+
+const TOKEN_KEY = "morph_owner_access"
+type Project = { id: string; title: string; stage: string; progress: number; next_milestone: string; client_due_at: string | null; payment_state: string; updated_at: string }
 
 export default function ProjectsPage() {
-  return <SectionPage eyebrow="Projects" title="Every project. One operational truth." description="Track delivery stage, ownership, next client action and deadlines without searching through chats or inboxes." action="New project +" stats={[
-    { label: "Active", value: "06", note: "Currently in delivery" },
-    { label: "Awaiting client", value: "03", note: "Approval or content needed" },
-    { label: "Planned", value: "04", note: "Scheduled next" },
-    { label: "Blocked", value: "01", note: "Needs intervention" },
-  ]} rows={[
-    { title: "Aster House", meta: "Hospitality · Website + motion", status: "Production", detail: "64% · Due Aug 27" },
-    { title: "Linea Dental", meta: "Dental · Treatment experience", status: "Client review", detail: "82% · Due Aug 23" },
-    { title: "Northline Build", meta: "Construction · Lead-gen website", status: "Final QA", detail: "94% · Due Aug 22" },
-    { title: "Form / Function", meta: "Interiors · Portfolio system", status: "Discovery", detail: "18% · Due Sep 03" },
-    { title: "Cabinetry One", meta: "Custom storage · Product site", status: "Scheduled", detail: "Starts Sep 02" },
-  ]} />
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    const token = sessionStorage.getItem(TOKEN_KEY)
+    if (!token) { queueMicrotask(() => setLoading(false)); return }
+    morphSupabaseQuery<Project>("morph_projects", token, { select: "id,title,stage,progress,next_milestone,client_due_at,payment_state,updated_at", order: "updated_at.desc", limit: 100 })
+      .then(setProjects).catch(() => setError("Live project data is unavailable.")).finally(() => setLoading(false))
+  }, [])
+
+  const stats = useMemo(() => ({
+    active: projects.filter(p => !["delivered","completed","archived","cancelled"].includes(p.stage.toLowerCase())).length,
+    review: projects.filter(p => /review|qa/i.test(p.stage)).length,
+    planned: projects.filter(p => /scheduled|planned|deposit/i.test(p.stage)).length,
+    completed: projects.filter(p => /delivered|completed|archived/i.test(p.stage)).length,
+  }), [projects])
+
+  return <>
+    <header className="border-b border-black/10 pb-8"><p className="text-[10px] uppercase tracking-[0.2em] text-black/35">Projects</p><h1 className="mt-3 text-[clamp(2.5rem,5vw,5.5rem)] font-semibold leading-[0.9] tracking-[-0.065em]">Every project.<br />One operational truth.</h1><p className="mt-5 max-w-2xl text-sm leading-6 text-black/45">Live delivery stage, progress, next milestone and commercial gate from the MORPH project registry.</p></header>
+    <section className="grid border-b border-black/10 sm:grid-cols-2 xl:grid-cols-4">{[["Active",stats.active,"Currently moving"],["Review / QA",stats.review,"Quality gates"],["Planned",stats.planned,"Scheduled next"],["Completed",stats.completed,"Delivered history"]].map(([label,value,note],i)=><article key={String(label)} className={`py-6 sm:p-6 ${i>0?"sm:border-l sm:border-black/10":""}`}><p className="text-[9px] uppercase tracking-[0.16em] text-black/35">{label}</p><p className="mt-4 text-4xl font-semibold tracking-[-0.055em]">{loading?"—":String(value).padStart(2,"0")}</p><p className="mt-2 text-xs text-black/40">{note}</p></article>)}</section>
+    <section className="py-7">{error&&<p role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</p>}{!loading&&projects.length===0?<div className="rounded-2xl border border-black/10 bg-white p-8"><p className="text-[10px] uppercase tracking-[0.16em] text-black/35">Live registry</p><h2 className="mt-3 text-2xl font-semibold tracking-[-0.04em]">No projects yet.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-black/45">The first qualified client project will appear here after provisioning. No demo projects are shown.</p></div>:<div className="overflow-hidden rounded-2xl border border-black/10 bg-white">{projects.map((project,index)=><article key={project.id} className={`grid gap-4 p-5 lg:grid-cols-[1.15fr_0.7fr_0.75fr_0.8fr] lg:items-center ${index>0?"border-t border-black/10":""}`}><div><h2 className="font-semibold tracking-[-0.025em]">{project.title}</h2><p className="mt-2 text-xs text-black/40">Next · {project.next_milestone || "Not assigned"}</p></div><div><div className="flex justify-between text-[9px] uppercase tracking-[0.13em] text-black/40"><span>{project.stage}</span><span>{project.progress}%</span></div><div className="mt-2 h-1.5 overflow-hidden rounded-full bg-black/[0.07]"><div className="h-full rounded-full bg-[#6257e8]" style={{width:`${project.progress}%`}} /></div></div><p className="text-xs font-medium">{project.payment_state}</p><p className="text-xs text-black/45 lg:text-right">{project.client_due_at?`Due ${new Date(project.client_due_at).toLocaleDateString()}`:"No client due date"}</p></article>)}</div>}</section>
+  </>
 }
